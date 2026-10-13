@@ -55,7 +55,7 @@ Students frequently make high-stakes educational and career decisions influenced
 
 - **Frontend**: HTML5, Modern CSS3 (Navy Blue & Mint Green theme, responsive grid/flexbox, accessible contrast), Vanilla JavaScript (ES6+), Fetch API. Zero heavy node_modules or front-end build pipelines required.
 - **Backend**: Python 3.10+, Flask 3.x, REST API, JSON serialization, server-side validation, HTTP status codes.
-- **Database**: SQLite 3 (Python built-in `sqlite3`), `PRAGMA foreign_keys = ON;`, parameterized SQL queries, automatic schema migration and seed data loading.
+- **Database**: Neon PostgreSQL via psycopg 3 on Vercel; SQLite remains available for local development and tests. Schema initialization and seed loading run automatically.
 - **Testing**: `pytest` test suite with 100% pass rate covering API routes, matching logic, edge cases, and SQLite persistence.
 
 ---
@@ -184,6 +184,14 @@ Starting CareerCompass Web Application on http://127.0.0.1:5000
 
 Open your browser and navigate to:
 👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
+
+### Vercel with Neon PostgreSQL
+
+1. Create a Neon PostgreSQL database and copy its connection string.
+2. In Vercel project settings, add `DATABASE_URL` with the Neon connection string for the production environment (and Preview if needed). Keep the value private; do not commit it to the repository.
+3. Deploy the project. The application creates missing tables and inserts seed data during initialization without resetting existing data. No writable application-directory database is used on Vercel.
+
+Local runs without `DATABASE_URL` continue to use SQLite. PostgreSQL deployments require the `psycopg[binary]` dependency listed in `requirements.txt`.
 
 ---
 
@@ -491,5 +499,6 @@ Follow this script for a flawless judge demonstration:
    - Highlight the side-by-side costs, challenges, and the 5 guided conversation questions for the family dinner table.
    - Conclude with the tagline: *"CareerCompass: Your future, your choice."*
 
-#   c a r e e r c o m p a s s - d e p l o y  
+#   c a r e e r c o m p a s s - d e p l o y 
+ 
  

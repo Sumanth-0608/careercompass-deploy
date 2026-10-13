@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderSimulatorResults(results);
 
       if (saveOnSubmit && data.comparison_id) {
-        showToast(`Comparison saved to SQLite database with ID #${data.comparison_id}!`, 'success');
+        showToast(`Comparison saved to database with ID #${data.comparison_id}!`, 'success');
       }
 
     } catch (err) {

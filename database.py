@@ -1,11 +1,12 @@
 """
 CareerCompass Database Layer
-Handles SQLite database connection, schema migration, seed data, and data access methods.
+Handles PostgreSQL/SQLite connections, schema initialization, seed data, and data access.
 """
 
-import os
-import sqlite3
 import json
+import os
+import re
+import sqlite3
 from datetime import datetime, timezone
 from flask import has_app_context, g, current_app
 from database_seeds import (
@@ -18,30 +19,98 @@ DEFAULT_DB_PATH = os.path.join(
 )
 
 
+class _PostgresCursor:
+    """Provides the application's portable qmark SQL interface on psycopg."""
+
+    def __init__(self, cursor):
+        self._cursor = cursor
+
+    def execute(self, query, params=None):
+        self._cursor.execute(query.replace("?", "%s"), params)
+        return self
+
+    def __getattr__(self, name):
+        return getattr(self._cursor, name)
+
+
+class _PostgresConnection:
+    """Small DB-API adapter for the query patterns shared by both backends."""
+
+    def __init__(self, connection):
+        self._connection = connection
+
+    def cursor(self):
+        return _PostgresCursor(self._connection.cursor())
+
+    def execute(self, query, params=None, **kwargs):
+        cursor = self._connection.execute(query.replace("?", "%s"), params, **kwargs)
+        return _PostgresCursor(cursor)
+
+    def __getattr__(self, name):
+        return getattr(self._connection, name)
+
+
+def _resolve_database_target(db_path=None):
+    """Resolve an explicit SQLite path, configured PostgreSQL URL, or local fallback."""
+    target = db_path
+    if target is None and has_app_context():
+        target = getattr(g, "db_path", None) or current_app.config.get("DATABASE")
+        if target is None:
+            target = current_app.config.get("DATABASE_URL")
+    if target is None:
+        target = os.environ.get("DATABASE_URL")
+    if target:
+        return target
+    if os.environ.get("VERCEL"):
+        raise RuntimeError(
+            "DATABASE_URL is required on Vercel. Configure the Neon PostgreSQL connection string."
+        )
+    return DEFAULT_DB_PATH
+
+
+def _is_postgres_target(target):
+    return str(target).startswith(("postgres://", "postgresql://"))
+
+
+def _connect(target):
+    if _is_postgres_target(target):
+        try:
+            import psycopg
+            from psycopg.rows import dict_row
+
+            return _PostgresConnection(psycopg.connect(target, row_factory=dict_row))
+        except ImportError:
+            raise RuntimeError(
+                "PostgreSQL support requires psycopg 3. Install the project requirements."
+            ) from None
+        except Exception:
+            raise RuntimeError(
+                "Could not connect to the configured PostgreSQL database. Check DATABASE_URL and Neon availability."
+            ) from None
+
+    os.makedirs(os.path.dirname(os.path.abspath(target)), exist_ok=True)
+    conn = sqlite3.connect(target)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON;")
+    return conn
+
+
 def get_db(db_path=None):
     """
-    Get a thread-safe database connection.
-    Enables SQLite foreign key enforcement and row factory dictionary access.
+    Get a request-scoped database connection.
     """
-    if db_path is None and has_app_context():
-        target_path = getattr(g, "db_path", None) or current_app.config.get("DATABASE") or DEFAULT_DB_PATH
-    else:
-        target_path = db_path or DEFAULT_DB_PATH
-
-    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    target = _resolve_database_target(db_path)
 
     # Check if g is available (inside Flask request context)
     if has_app_context():
-        if hasattr(g, "db_conn") and g.db_conn is not None and getattr(g, "db_conn_path", None) == target_path:
+        if hasattr(g, "db_conn") and g.db_conn is not None and getattr(g, "db_conn_path", None) == target:
             return g.db_conn
 
-    conn = sqlite3.connect(target_path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON;")
+    conn = _connect(target)
 
     if has_app_context():
         g.db_conn = conn
-        g.db_conn_path = target_path
+        g.db_conn_path = target
 
     return conn
 
@@ -57,41 +126,56 @@ def close_db(e=None):
 
 def init_db(db_path=None, reset=False):
     """
-    Initializes database schema and populates seed career dataset.
+    Initializes schema and seed data without resetting existing PostgreSQL data.
     """
-    target_path = db_path or DEFAULT_DB_PATH
-    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    target = _resolve_database_target(db_path)
+    is_postgres = _is_postgres_target(target)
 
-    if reset and os.path.exists(target_path):
+    if reset and not is_postgres and os.path.exists(target):
         try:
-            os.remove(target_path)
+            os.remove(target)
         except PermissionError:
             pass
 
-    conn = sqlite3.connect(target_path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON;")
+    conn = _connect(target)
 
     schema_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.sql")
     with open(schema_file, "r", encoding="utf-8") as f:
-        conn.executescript(f.read())
+        schema = f.read()
 
-    # Check if seed careers exist
-    cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) as count FROM careers")
-    count = cur.fetchone()["count"]
+    try:
+        if is_postgres:
+            # Serialize cold-start initialization across concurrent Vercel instances.
+            conn.execute("SELECT pg_advisory_xact_lock(?)", (739184216,))
+            conn.execute(schema, prepare=False)
+        else:
+            sqlite_schema = re.sub(
+                r"INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY",
+                "INTEGER PRIMARY KEY AUTOINCREMENT",
+                schema,
+            )
+            conn.executescript(sqlite_schema)
 
-    if count == 0:
-        seed_careers(conn)
+        # Check if seed careers exist
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) as count FROM careers")
+        count = cur.fetchone()["count"]
 
-    # Always ensure additional careers (civil engineering, sports, business, expanded), opportunities, quotes, and appointments are seeded
-    seed_additional_careers(conn)
-    seed_opportunities(conn)
-    seed_career_quotes(conn)
-    seed_appointments(conn)
+        if count == 0:
+            seed_careers(conn)
 
-    conn.commit()
-    conn.close()
+        # Always ensure additional careers, opportunities, quotes, and appointments are seeded.
+        seed_additional_careers(conn)
+        seed_opportunities(conn)
+        seed_career_quotes(conn)
+        seed_appointments(conn)
+
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def seed_careers(conn):
@@ -865,7 +949,7 @@ def seed_careers(conn):
             c["important_skills"], c["suggested_beginner_projects"], c["learning_roadmap"],
             c["cost_category"], c["cost_estimate_detail"], c["low_cost_routes"],
             c["entrance_exams"], c["advantages"], c["challenges"],
-            c["geographic_considerations"], c["regulated"], c["source_urls"],
+            c["geographic_considerations"], bool(c["regulated"]), c["source_urls"],
             c["last_verified"]
         ))
 
@@ -937,7 +1021,7 @@ def save_assessment(data, db_path=None):
             education_level, current_stream, favorite_subjects,
             interests, strengths, preferred_work_style, career_goals,
             budget_range, location_preference, existing_skills, constraints
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id
     """, (
         data.get("education_level", "Undergraduate"),
         data.get("current_stream", ""),
@@ -951,8 +1035,9 @@ def save_assessment(data, db_path=None):
         existing_skills,
         data.get("constraints", "")
     ))
+    assessment_id = cur.fetchone()["id"]
     conn.commit()
-    return cur.lastrowid
+    return assessment_id
 
 
 def get_assessment(assessment_id, db_path=None):
@@ -1039,9 +1124,9 @@ def save_career_plan(career_id, assessment_id=None, student_name="Student", note
 
     cur.execute("""
         INSERT INTO career_plans (assessment_id, career_id, student_name, title, notes, status)
-        VALUES (?, ?, ?, ?, ?, 'active')
+        VALUES (?, ?, ?, ?, ?, 'active') RETURNING id
     """, (assessment_id, career_id, student_name, title, notes))
-    plan_id = cur.lastrowid
+    plan_id = cur.fetchone()["id"]
 
     # Populate milestones from career roadmap
     roadmap = career.get("learning_roadmap", [])
@@ -1055,7 +1140,7 @@ def save_career_plan(career_id, assessment_id=None, student_name="Student", note
         cur.execute("""
             INSERT INTO roadmap_milestones (
                 plan_id, step_number, title, explanation, suggested_action, estimated_duration, is_completed
-            ) VALUES (?, ?, ?, ?, ?, ?, 0)
+            ) VALUES (?, ?, ?, ?, ?, ?, FALSE)
         """, (
             plan_id,
             step.get("step", 1),
@@ -1111,7 +1196,7 @@ def get_all_plans(db_path=None):
     cur.execute("""
         SELECT p.*, c.title as career_title, c.slug as career_slug, c.category,
                (SELECT COUNT(*) FROM roadmap_milestones WHERE plan_id = p.id) as total_milestones,
-               (SELECT COUNT(*) FROM roadmap_milestones WHERE plan_id = p.id AND is_completed = 1) as completed_milestones
+               (SELECT COUNT(*) FROM roadmap_milestones WHERE plan_id = p.id AND is_completed = TRUE) as completed_milestones
         FROM career_plans p
         JOIN careers c ON p.career_id = c.id
         ORDER BY p.updated_at DESC
@@ -1137,7 +1222,7 @@ def update_milestone_status(plan_id, milestone_id, is_completed, db_path=None):
         UPDATE roadmap_milestones
         SET is_completed = ?, completed_at = ?
         WHERE id = ? AND plan_id = ?
-    """, (1 if is_completed else 0, completed_at, milestone_id, plan_id))
+    """, (bool(is_completed), completed_at, milestone_id, plan_id))
 
     if cur.rowcount == 0:
         return False
@@ -1164,7 +1249,7 @@ def save_career_comparison(data, db_path=None):
             student_reasons, alternative_reasons,
             education_comparison, cost_comparison, challenges_comparison,
             discussion_questions, shared_decision_summary, alignment_status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id
     """, (
         data.get("assessment_id"),
         data["student_career_id"],
@@ -1178,8 +1263,9 @@ def save_career_comparison(data, db_path=None):
         data.get("shared_decision_summary", ""),
         data.get("alignment_status", "exploring")
     ))
+    comparison_id = cur.fetchone()["id"]
     conn.commit()
-    return cur.lastrowid
+    return comparison_id
 
 
 def get_career_comparison(comparison_id, db_path=None):
@@ -1233,10 +1319,11 @@ def save_scenario_comparison(baseline_profile, alternative_profile, comparison_r
 
     cur.execute("""
         INSERT INTO scenario_comparisons (baseline_profile, alternative_profile, comparison_results)
-        VALUES (?, ?, ?)
+        VALUES (?, ?, ?) RETURNING id
     """, (b_json, a_json, r_json))
+    comparison_id = cur.fetchone()["id"]
     conn.commit()
-    return cur.lastrowid
+    return comparison_id
 
 
 def get_scenario_comparison(comparison_id, db_path=None):
@@ -1287,7 +1374,7 @@ def seed_additional_careers(conn):
                 c["important_skills"], c["suggested_beginner_projects"], c["learning_roadmap"],
                 c["cost_category"], c["cost_estimate_detail"], c["low_cost_routes"],
                 c["entrance_exams"], c["advantages"], c["challenges"],
-                c["geographic_considerations"], c["regulated"], c["source_urls"],
+                c["geographic_considerations"], bool(c["regulated"]), c["source_urls"],
                 c["last_verified"]
             ))
 
@@ -1311,7 +1398,7 @@ def seed_opportunities(conn):
             """, (
                 opp["title"], opp["employer_or_source"], opp["category"], opp["opportunity_type"],
                 opp["location_city"], opp["work_mode"], opp["eligibility"], opp["skills_required"],
-                opp["schedule_type"], opp.get("stipend_or_compensation"), opp.get("is_verified", 1),
+                opp["schedule_type"], opp.get("stipend_or_compensation"), bool(opp.get("is_verified", 1)),
                 opp.get("verification_status", "Verified Official Portal Framework"),
                 opp.get("last_verified", "2026-10-10"), opp.get("application_deadline", "Ongoing"),
                 opp["official_url"], opp["description"], opp["source_portal"],
@@ -1347,7 +1434,7 @@ def seed_appointments(conn):
                     name, title, organization, is_verified, badge_label, rating, bio, initials, avatar_bg
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
-                p["name"], p["title"], p["organization"], p.get("is_verified", 1),
+                p["name"], p["title"], p["organization"], bool(p.get("is_verified", 1)),
                 p.get("badge_label", "Verified Guidance Counsellor"), p.get("rating", 4.9),
                 p["bio"], p["initials"], p.get("avatar_bg", "#2563EB")
             ))
@@ -1380,7 +1467,7 @@ def seed_appointments(conn):
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 s["type_id"], s["provider_id"], s["slot_date"], s["start_time"], s["end_time"],
-                s.get("is_booked", 0), s.get("status", "available"), s.get("meeting_mode", "Google Meet (Encrypted Video Link)")
+                bool(s.get("is_booked", 0)), s.get("status", "available"), s.get("meeting_mode", "Google Meet (Encrypted Video Link)")
             ))
 
 
@@ -1413,7 +1500,7 @@ def get_opportunities(category=None, location_city=None, work_mode=None, opportu
         params.append(category)
 
     if location_city and location_city.lower() not in ["all", "all cities", ""]:
-        conditions.append("(location_city LIKE ? OR work_mode = 'remote')")
+        conditions.append("(LOWER(location_city) LIKE LOWER(?) OR work_mode = 'remote')")
         params.append(f"%{location_city}%")
 
     if work_mode and work_mode.lower() != "all":
@@ -1426,7 +1513,7 @@ def get_opportunities(category=None, location_city=None, work_mode=None, opportu
 
     if query and query.strip():
         q_term = f"%{query.strip()}%"
-        conditions.append("(title LIKE ? OR employer_or_source LIKE ? OR description LIKE ? OR eligibility LIKE ?)")
+        conditions.append("(LOWER(title) LIKE LOWER(?) OR LOWER(employer_or_source) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?) OR LOWER(eligibility) LIKE LOWER(?))")
         params.extend([q_term, q_term, q_term, q_term])
 
     where_sql = f"WHERE {' AND '.join(conditions)}" if conditions else ""
@@ -1602,7 +1689,7 @@ def get_appointment_providers(is_verified=None, db_path=None):
     params = []
     if is_verified is not None:
         sql += " AND is_verified = ?"
-        params.append(1 if is_verified else 0)
+        params.append(bool(is_verified))
     sql += " ORDER BY rating DESC, id ASC"
     cur.execute(sql, params)
     return [dict(r) for r in cur.fetchall()]
@@ -1631,7 +1718,7 @@ def get_available_slots(type_id=None, slot_date=None, category=None, provider_id
     params = []
 
     if not include_booked:
-        sql += " AND s.is_booked = 0 AND s.status = 'available'"
+        sql += " AND s.is_booked = FALSE AND s.status = 'available'"
 
     if type_id:
         sql += " AND s.type_id = ?"
@@ -1715,8 +1802,8 @@ def book_appointment_slot(slot_id, student_name, student_email, student_phone, e
     # 1. ATOMIC LOCK: Update slot ONLY IF not currently booked
     cur.execute("""
         UPDATE appointment_slots
-        SET is_booked = 1, status = 'booked'
-        WHERE id = ? AND is_booked = 0 AND status = 'available'
+        SET is_booked = TRUE, status = 'booked'
+        WHERE id = ? AND is_booked = FALSE AND status = 'available'
     """, (slot_id,))
 
     if cur.rowcount == 0:
@@ -1773,7 +1860,7 @@ def cancel_appointment_booking(booking_ref, reason="Cancelled by student", db_pa
     # Atomically release slot back to available
     cur.execute("""
         UPDATE appointment_slots
-        SET is_booked = 0, status = 'available'
+        SET is_booked = FALSE, status = 'available'
         WHERE id = ?
     """, (slot_id,))
 
@@ -1805,8 +1892,8 @@ def reschedule_appointment_booking(booking_ref, new_slot_id, db_path=None):
     # Attempt atomic lock on new slot
     cur.execute("""
         UPDATE appointment_slots
-        SET is_booked = 1, status = 'booked'
-        WHERE id = ? AND is_booked = 0 AND status = 'available'
+        SET is_booked = TRUE, status = 'booked'
+        WHERE id = ? AND is_booked = FALSE AND status = 'available'
     """, (new_slot_id,))
 
     if cur.rowcount == 0:
@@ -1815,7 +1902,7 @@ def reschedule_appointment_booking(booking_ref, new_slot_id, db_path=None):
     # Release old slot
     cur.execute("""
         UPDATE appointment_slots
-        SET is_booked = 0, status = 'available'
+        SET is_booked = FALSE, status = 'available'
         WHERE id = ?
     """, (old_slot_id,))
 
@@ -1848,7 +1935,7 @@ def save_ai_conversation(conv_id, session_id, provider, model, title, profile_sh
             title = excluded.title,
             profile_shared = excluded.profile_shared,
             updated_at = CURRENT_TIMESTAMP
-    """, (conv_id, session_id, provider, model, title[:100], 1 if profile_shared else 0))
+    """, (conv_id, session_id, provider, model, title[:100], bool(profile_shared)))
     conn.commit()
     return conv_id
 
@@ -1860,15 +1947,16 @@ def add_ai_message(conv_id, role, content, action_chips=None, db_path=None):
     chips_json = json.dumps(action_chips) if action_chips else None
     cur.execute("""
         INSERT INTO ai_messages (conversation_id, role, content, action_chips)
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?) RETURNING id
     """, (conv_id, role, content, chips_json))
+    message_id = cur.fetchone()["id"]
     
     # Update conversation updated_at
     cur.execute("""
         UPDATE ai_conversations SET updated_at = CURRENT_TIMESTAMP WHERE id = ?
     """, (conv_id,))
     conn.commit()
-    return cur.lastrowid
+    return message_id
 
 
 def get_ai_conversations(session_id, limit=30, db_path=None):

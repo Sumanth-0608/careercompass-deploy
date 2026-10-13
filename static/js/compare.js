@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.history.pushState({ path: newUrl }, '', newUrl);
 
         renderComparisonDetails(data.comparison);
-        showToast('Comparison saved to SQLite! Side-by-side realities generated below.', 'success');
+        showToast('Comparison saved! Side-by-side realities generated below.', 'success');
 
         resultContainer.scrollIntoView({ behavior: 'smooth' });
       } else {
