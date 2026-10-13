@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Your Career Recommendations — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="recommendations-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Explainable Match Results</span>
+        <h2>Your Personalized Career Pathways</h2>
+        <p style="margin-bottom: 0;">
+          Here are pathways identified by our transparent rule engine based on your submitted profile.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="{{ url_for('quiz') }}" class="btn btn-secondary btn-sm">Retake Assessment</a>
+        <a href="{{ url_for('careers_catalog') }}" class="btn btn-secondary btn-sm">Browse All 14+ Careers</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transparent Ethics Notice -->
+  <div class="disclaimer-banner" style="margin-top: 0; margin-bottom: 2rem;">
+    <span class="icon">⚖️</span>
+    <div>
+      <strong>Guidance, Not a Guarantee:</strong>
+      No algorithm can dictate your life. Match scores indicate rule-based alignment with your current interests and stated preferences. They are designed to expand awareness and provoke thoughtful exploration, never to limit your choices.
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div id="loading-spinner" style="text-align: center; padding: 4rem 0;">
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧭</div>
+    <h3>Evaluating Career Pathways...</h3>
+    <p>Calculating multi-factor alignments across interests, strengths, and educational routes.</p>
+  </div>
+
+  <!-- Recommendations List Container -->
+  <div id="recommendations-container" class="recommendation-cards" style="display: none;"></div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="card" style="display: none; text-align: center; padding: 4rem 2rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+    <h3>No Assessment Found</h3>
+    <p style="max-width: 500px; margin: 0 auto 1.5rem;">
+      Take the 3-minute Career Discovery Assessment to generate tailored, explainable recommendations.
+    </p>
+    <a href="{{ url_for('quiz') }}" class="btn btn-primary">Take Career Assessment</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.CAREERCOMPASS_ASSESSMENT_ID = "{{ assessment_id or '' }}";
+</script>
+<script src="{{ url_for('static', filename='js/recommendations.js') }}"></script>
+{% endblock %}

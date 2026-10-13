@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}Business & Commerce Careers Hub — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════
+       HERO HEADER & OVERVIEW
+  ════════════════════════════════════════════════ -->
+  <div class="section-header text-left" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Dedicated Exploration Hub</span>
+        <h2>Business, Commerce &amp; Management Careers</h2>
+        <p style="margin-bottom: 0; color: var(--text-muted); max-width: 820px;">
+          Explore pathways that power modern commerce, finance, technology product strategy, and organizational growth. Discover how analytical thinking, empathy, and strategic resource allocation create sustainable human enterprises.
+        </p>
+      </div>
+      <a href="{{ url_for('careers_catalog') }}" class="btn btn-secondary btn-sm">
+        &larr; Back to All Careers
+      </a>
+    </div>
+  </div>
+
+  <!-- Transparent Ethics & Realistic Guidance Notice -->
+  <div class="disclaimer-banner" style="margin-bottom: 2.5rem;">
+    <span class="icon">💼</span>
+    <div>
+      <strong>Authentic Guidance Notice:</strong>
+      Business careers offer diverse entry routes, from open portfolio self-learning to statutory qualifications like the Chartered Accountancy (ICAI) articleship. We do not invent arbitrary salary figures or employment cutoffs; explore the verified requirements below.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       INTERACTIVE BUSINESS SIMULATION: Startup Strategic Decisions
+  ════════════════════════════════════════════════ -->
+  <section class="card glass-card" style="margin-bottom: 3.5rem; padding: 2.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <span class="badge badge-primary" style="margin-bottom: 0.4rem;">Interactive Strategic Simulation</span>
+        <h3 style="font-size: 1.4rem; margin: 0.2rem 0 0.4rem;">The Startup Strategy &amp; Budget Simulation</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Experience the day-to-day decisions of a <strong>Business Analyst &amp; Product Manager</strong>! Balance pricing, product quality, and marketing spend for a student sustainable apparel brand. (Illustrative simulation using fictional business data).
+        </p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: start;">
+      
+      <!-- Simulation Controls -->
+      <div style="background: rgba(255,255,255,0.6); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        
+        <!-- Pricing Strategy -->
+        <div class="form-group">
+          <label for="pricing-choice" class="form-label" style="font-size: 0.88rem;">1. Unit Price Strategy:</label>
+          <select id="pricing-choice" class="form-control">
+            <option value="economy">Budget / Economy: ₹499 per unit (High Volume, Low Margin)</option>
+            <option value="balanced" selected>Mid-Tier Balanced: ₹899 per unit (Balanced Margin &amp; Reach)</option>
+            <option value="premium">Premium Eco-Friendly: ₹1,499 per unit (High Margin, Lower Volume)</option>
+          </select>
+        </div>
+
+        <!-- Material Quality Investment -->
+        <div class="form-group">
+          <label for="quality-choice" class="form-label" style="font-size: 0.88rem;">2. Sustainable Sourcing Quality:</label>
+          <select id="quality-choice" class="form-control">
+            <option value="basic">Standard Cotton (Cost: ₹250/unit, Low Eco-Impact)</option>
+            <option value="certified" selected>Certified Organic (Cost: ₹420/unit, High Durability)</option>
+            <option value="closed_loop">Zero-Waste Recycled Fiber (Cost: ₹650/unit, Premium Story)</option>
+          </select>
+        </div>
+
+        <!-- Monthly Marketing Channel -->
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="marketing-choice" class="form-label" style="font-size: 0.88rem;">3. Customer Acquisition Channel:</label>
+          <select id="marketing-choice" class="form-control">
+            <option value="organic">Organic Student Word-of-Mouth &amp; Reels (Budget: ₹5,000/mo)</option>
+            <option value="paid_meta" selected>Targeted Digital Ads &amp; Campus Ambassadors (Budget: ₹25,000/mo)</option>
+            <option value="influencer">Influencer Sponsorships &amp; Pop-up Events (Budget: ₹60,000/mo)</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Simulated Impact Dashboard -->
+      <div style="background: rgba(234,243,255,0.7); padding: 1.5rem; border-radius: var(--radius-md); border: 1.5px solid rgba(37,99,235,0.25);">
+        <h4 style="font-size: 1.1rem; color: var(--deep-navy); margin-bottom: 1rem;">Quarterly Business Projections</h4>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span>Projected Units Sold:</span>
+            <strong id="sim-units" style="color: var(--text-heading);">1,200 Units</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Gross Revenue:</span>
+            <strong id="sim-revenue">₹10,78,800</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Cost of Goods (COGS):</span>
+            <strong id="sim-cogs">₹5,04,000</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Operating &amp; Marketing Spend:</span>
+            <strong id="sim-opex">₹75,000</strong>
+          </div>
+          <div style="border-top: 1.5px solid rgba(37,99,235,0.25); padding-top: 0.75rem; margin-top: 0.25rem; display: flex; justify-content: space-between; font-size: 1.1rem;">
+            <span>Projected Net Profit:</span>
+            <strong id="sim-profit" style="color: #065F46;">+₹4,99,800</strong>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; padding: 0.85rem; background: #FFFFFF; border-radius: var(--radius-sm); border: 1px solid rgba(37,99,235,0.2); font-size: 0.84rem;">
+          🔍 <strong id="sim-insight-title">Strategic Insight:</strong>
+          <p id="sim-insight-body" style="color: var(--text-muted); margin: 0.25rem 0 0; line-height: 1.5;">
+            Healthy unit economics with solid brand reputation. Reinvesting surplus in supply chain efficiency is recommended.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BUSINESS & COMMERCE PATHWAYS CATALOG
+  ════════════════════════════════════════════════ -->
+  <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+    <h3>Key Business, Finance &amp; Strategy Pathways</h3>
+    <p style="color: var(--text-muted);">Explore roles, skill expectations, typical challenges, and entry roadmaps.</p>
+  </div>
+
+  <div class="features-grid" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); margin-bottom: 4rem;">
+
+    <!-- 1. Chartered Accountant -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Accounting &amp; Law</span>
+          <span class="badge badge-regulated">Statutory ICAI License</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Chartered Accountant (CA) &amp; Auditor</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Statutory financial auditing, direct and indirect taxation, corporate compliance, and strategic financial management.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Prerequisite:</strong> ICAI Foundation / Direct Entry + Intermediate + 2-Yr Articleship + Final</div>
+          <div><strong>Core Skills:</strong> Tax Laws, Audit Vouching, Ind AS, Financial Statements</div>
+          <div><strong>Trade-off:</strong> Rigorous pass rates requiring sustained exam discipline</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/chartered-accountant" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=chartered-accountant" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 2. Business Analyst -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Data &amp; Operations</span>
+          <span class="badge badge-mint">High Corporate Demand</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Business Analyst</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Bridges business needs with technology solutions: analyzes workflows, writes user stories, models financial feasibility, and translates stakeholder goals.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> B.Com, BBA, Economics, Engineering, or Data Analytics</div>
+          <div><strong>Core Skills:</strong> SQL, Excel Financial Models, Process Mapping, Jira</div>
+          <div><strong>Beginner Project:</strong> Audit a local business's checkout queue &amp; model savings</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/business-analyst" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=business-analyst" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 3. Product Manager -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Tech Strategy</span>
+          <span class="badge badge-mint">Cross-Functional</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Product Manager</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Aligns engineering, UX design, and commercial strategy to define product roadmaps, prioritize feature sprints, and solve customer pain points.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Engineering, Commerce, or Design; often MBA transition</div>
+          <div><strong>Core Skills:</strong> User Discovery, PRDs, Wireframing (Figma), Funnel Analytics</div>
+          <div><strong>Trade-off:</strong> Full accountability with no direct authority over team</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/product-manager" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=product-manager" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 4. Marketing Specialist -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Brand &amp; Growth</span>
+          <span class="badge badge-mint">Creative &amp; Analytical</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Marketing Specialist &amp; Brand Strategist</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Designs multichannel customer acquisition funnels, content strategies, brand storytelling, and data-driven ad campaigns.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> BBA, Mass Comm, Commerce, or proven digital portfolio</div>
+          <div><strong>Core Skills:</strong> SEO, Content Copywriting, GA4 Analytics, Meta Ads</div>
+          <div><strong>Beginner Project:</strong> Run a campus club newsletter and track open rates</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/marketing-specialist" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=marketing-specialist" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 5. Operations & Supply Chain Manager -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Logistics &amp; Scale</span>
+          <span class="badge badge-mint">Essential Commerce</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Operations &amp; Supply Chain Manager</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Optimizes end-to-end material procurement, warehouse inventory buffers, freight dispatch, and lean factory workflows.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Engineering, Commerce, BBA in Supply Chain / MBA</div>
+          <div><strong>Core Skills:</strong> Demand Forecasting, SAP/ERP, Vendor Contracting, Lean</div>
+          <div><strong>Sector Demand:</strong> E-commerce, Quick Commerce, Manufacturing, Exports</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/supply-chain-manager" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=supply-chain-manager" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 6. Human Resources Specialist -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">People &amp; Culture</span>
+          <span class="badge badge-mint">Corporate Governance</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Human Resources (HR) &amp; Talent Specialist</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Leads candidate recruitment, onboarding, statutory workplace compliance, performance appraisals, and conflict mediation.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> BBA, Psychology, Commerce, followed by MBA in HR / SHRM</div>
+          <div><strong>Core Skills:</strong> Competency Interviews, Labour Laws, HRIS, Mediation</div>
+          <div><strong>Key Impact:</strong> Fostering safe, fair, and high-performing workplace teams</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/hr-specialist" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/roadmap?career_slug=hr-specialist" class="btn btn-outline btn-sm">Roadmap</a>
+      </div>
+    </div>
+
+    <!-- 7. Entrepreneur / Startup Founder -->
+    <div class="card glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Venture Creation</span>
+          <span class="badge badge-primary">High Autonomy</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Entrepreneur / Startup Founder</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Identifies unaddressed market problems, builds initial minimum viable products (MVPs), secures early customers, and manages capital risk.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Reality Check:</strong> High financial ambiguity; requires rapid testing and frugal budgeting</div>
+          <div><strong>Core Skills:</strong> Sales, Cash Flow Discipline, Resilience, Team Leadership</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/careers/entrepreneur" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+        <a href="/simulator" class="btn btn-outline btn-sm">Simulate Budget</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Strategic Startup Simulation Logic
+    const pricingSelect = document.getElementById('pricing-choice');
+    const qualitySelect = document.getElementById('quality-choice');
+    const marketingSelect = document.getElementById('marketing-choice');
+
+    const simUnits = document.getElementById('sim-units');
+    const simRevenue = document.getElementById('sim-revenue');
+    const simCogs = document.getElementById('sim-cogs');
+    const simOpex = document.getElementById('sim-opex');
+    const simProfit = document.getElementById('sim-profit');
+    const simTitle = document.getElementById('sim-insight-title');
+    const simBody = document.getElementById('sim-insight-body');
+
+    function runSimulation() {
+      const price = pricingSelect.value;
+      const quality = qualitySelect.value;
+      const mkt = marketingSelect.value;
+
+      let unitPrice = 899;
+      let baseVolume = 1000;
+      if (price === 'economy') { unitPrice = 499; baseVolume = 2000; }
+      else if (price === 'premium') { unitPrice = 1499; baseVolume = 550; }
+
+      let unitCost = 420;
+      let satisfactionFactor = 1.0;
+      if (quality === 'basic') { unitCost = 250; satisfactionFactor = 0.85; }
+      else if (quality === 'closed_loop') { unitCost = 650; satisfactionFactor = 1.25; }
+
+      let mktSpend = 25000 * 3; // quarterly
+      let mktMultiplier = 1.1;
+      if (mkt === 'organic') { mktSpend = 5000 * 3; mktMultiplier = 0.85; }
+      else if (mkt === 'influencer') { mktSpend = 60000 * 3; mktMultiplier = 1.35; }
+
+      const actualUnits = Math.round(baseVolume * satisfactionFactor * mktMultiplier);
+      const revenue = actualUnits * unitPrice;
+      const cogs = actualUnits * unitCost;
+      const opex = mktSpend + 30000; // general admin
+      const profit = revenue - cogs - opex;
+
+      simUnits.textContent = `${actualUnits.toLocaleString('en-IN')} Units`;
+      simRevenue.textContent = `₹${revenue.toLocaleString('en-IN')}`;
+      simCogs.textContent = `₹${cogs.toLocaleString('en-IN')}`;
+      simOpex.textContent = `₹${opex.toLocaleString('en-IN')}`;
+
+      if (profit >= 0) {
+        simProfit.textContent = `+₹${profit.toLocaleString('en-IN')}`;
+        simProfit.style.color = '#065F46';
+        simTitle.textContent = 'Strategic Insight: Profitable Venture';
+        simBody.textContent = 'Your pricing covers manufacturing quality and acquisition overhead with healthy operating margin. Good working capital stability.';
+      } else {
+        simProfit.textContent = `-₹${Math.abs(profit).toLocaleString('en-IN')}`;
+        simProfit.style.color = '#DC2626';
+        simTitle.textContent = 'Strategic Warning: Cash Deficit';
+        simBody.textContent = 'High production cost or marketing spend exceeds gross revenue at this unit volume. Try raising unit price or optimizing customer acquisition spend.';
+      }
+    }
+
+    pricingSelect.addEventListener('change', runSimulation);
+    qualitySelect.addEventListener('change', runSimulation);
+    marketingSelect.addEventListener('change', runSimulation);
+    runSimulation();
+  });
+</script>
+{% endblock %}

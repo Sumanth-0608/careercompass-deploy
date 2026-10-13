@@ -1,0 +1,592 @@
+{% extends "base.html" %}
+
+{% block title %}Student–Parent Career Bridge & Family Explorer — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="compare-container">
+    
+    <!-- ═══════════════════════════════════════════════
+         HEADER & ETHICS NOTICE
+    ════════════════════════════════════════════════ -->
+    <div class="section-header text-left" style="margin-bottom: 2rem;">
+      <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Family Alignment &amp; Empathy Toolkit</span>
+      <h2>Parent &amp; Student Career Explorer</h2>
+      <p style="color: var(--text-muted); max-width: 820px;">
+        Career decisions should bring families together, not create conflict. This tool grounds discussions in factual realities, examines everyday life, highlights transferable skills, and balances parental prudence with student agency.
+      </p>
+    </div>
+
+    <!-- Agency Notice -->
+    <div class="disclaimer-banner" style="margin-top: 0; margin-bottom: 2rem; border-left: 4px solid var(--primary-blue);">
+      <span class="icon">🤝</span>
+      <div>
+        <strong>Preserving Student Agency &amp; Parental Empathy:</strong>
+        Neither the parent's preference nor the student's preference should automatically override the other. CareerCompass provides an objective space where practical constraints and genuine personal curiosity can meet to reach a collaborative, informed decision.
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         STRUCTURED COLLABORATIVE 5-STEP ACTIVITY
+    ════════════════════════════════════════════════ -->
+    <section class="card glass-card" style="margin-bottom: 3rem; padding: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+          <span class="badge badge-primary" style="margin-bottom: 0.4rem;">Guided 5-Step Activity</span>
+          <h3 style="font-size: 1.35rem; margin: 0.2rem 0 0.35rem;">Family Alignment &amp; Agreement Mapping</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            Follow these 5 steps together to discover shared ground, address real worries, and agree on a practical next step.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5-Step Process Tabs / Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.75rem;">
+        
+        <!-- Step 1: Student Inputs -->
+        <div style="background: rgba(255,255,255,0.6); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid var(--primary-blue);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <span class="step-number" style="width: 26px; height: 26px; font-size: 0.8rem; margin: 0;">1</span>
+            <strong style="color: var(--primary-blue); font-size: 0.95rem;">Student: Goals &amp; Excitement</strong>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">Select your top personal priorities:</p>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem;" id="student-goals-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="s_goal" value="creativity" checked> Creative Freedom &amp; Building Things
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="s_goal" value="growth" checked> Fast Skill Growth &amp; Tech Innovations
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="s_goal" value="impact"> Tangible Community / Societal Impact
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="s_goal" value="autonomy"> Independence &amp; Flexible Work Style
+            </label>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-primary pv-trigger-btn" style="margin-top: 0.85rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 700; border-radius: 8px;">
+            <span>🎙️ AI Parent Voice Guide</span>
+            <span class="badge badge-mint" style="font-size: 0.7rem; padding: 2px 6px;">తెలుగు • हिन्दी • English</span>
+          </button>
+        </div>
+
+        <!-- Step 2: Parent Inputs -->
+        <div style="background: rgba(255,255,255,0.6); padding: 1.25rem; border-radius: var(--radius-md); border-top: 3px solid var(--deep-navy);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <span class="step-number" style="width: 26px; height: 26px; font-size: 0.8rem; margin: 0; background: var(--deep-navy);">2</span>
+            <strong style="color: var(--deep-navy); font-size: 0.95rem;">Parent: Real Constraints &amp; Worries</strong>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">Check your practical family concerns:</p>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem;" id="parent-worries-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="p_worry" value="stability" checked> Predictable Employment &amp; Stability
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="p_worry" value="tuition" checked> Managing High College Tuition Costs
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="p_worry" value="licensure"> Formal Qualifications / Degree Recognition
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" name="p_worry" value="burnout"> Excessive Stress &amp; Work-Life Balance
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Step 3: Interactive Agreement vs Divergence Map -->
+      <div id="alignment-map-box" style="background: rgba(234,243,255,0.75); border: 1.5px solid rgba(37,99,235,0.25); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <span style="font-size: 1.1rem;">⚖️</span>
+          <strong style="font-size: 1rem; color: var(--deep-navy);">Step 3: Areas of Agreement &amp; Divergence</strong>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;" id="alignment-points">
+          <div style="background: rgba(220,252,231,0.6); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(34,197,94,0.3);">
+            <strong style="color: #166534;">🟢 Mutual Agreement:</strong>
+            <p style="margin: 0.25rem 0 0; color: #166534;">Both want long-term self-reliance, recognized skills, and sustainable financial peace of mind.</p>
+          </div>
+          <div style="background: rgba(254,243,199,0.6); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.3);">
+            <strong style="color: #92400E;">🟡 Point to Bridge:</strong>
+            <p style="margin: 0.25rem 0 0; color: #92400E;">Student seeks creative flexibility; Parents are worried about tuition loans or uncertain hiring cycles.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 & 5: Middle Ground Solution & Next Step -->
+      <div style="background: rgba(255,255,255,0.5); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <strong style="font-size: 0.95rem; color: var(--text-heading); display: block; margin-bottom: 0.5rem;">
+          🤝 Step 4 &amp; 5: Explore Middle-Ground Routes &amp; Agree on a Trial Action
+        </strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          A compromise doesn't mean giving up your dream—it means taking a low-risk, verified step that tests the student's enthusiasm while giving parents financial confidence.
+        </p>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-navy">🌱 Try a 3-week beginner micro-project</span>
+          <span class="badge badge-navy">🏛️ Research state college &amp; scholarship options</span>
+          <span class="badge badge-mint">🧭 Keep backup career as a minor or second degree</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SAVED BRIDGE BANNER (IF LOADED)
+    ════════════════════════════════════════════════ -->
+    <div id="saved-bridge-banner" class="card glass-card" style="display: none; background: var(--pale-blue); border-color: rgba(59, 130, 246, 0.30); margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong style="color: var(--deep-navy);">✨ Loaded Persistent Comparison Bridge #<span id="bridge-id-text"></span></strong>
+          <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">
+            Persistently saved in SQLite database. Revisit anytime with your family.
+          </p>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="window.print()">Print / Export PDF 🖨️</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         1. DETAILED SIDE-BY-SIDE REALITY CHECK
+    ════════════════════════════════════════════════ -->
+    <div id="comparison-result" class="section-container" style="margin-bottom: 3rem;">
+      <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+        <h3>Detailed Side-by-Side Reality Check</h3>
+        <p style="color: var(--text-muted);">Objective parameters grounded in verifiable educational requirements and day-to-day realities.</p>
+      </div>
+
+      <div class="compare-grid" id="compare-cards-grid">
+        <div class="card glass-card" style="border-top: 4px solid var(--primary-blue); padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-mint">Student Choice</span>
+            <span class="badge badge-navy">Career Reality</span>
+          </div>
+          <h4 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.25rem;">🎓 Primary Pathway Overview</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem; line-height: 1.5;">
+            Select the student's chosen career in the form below or review the voice guidance to evaluate objective admission criteria, degree timelines, and practical skills.
+          </p>
+          <div style="font-size: 0.82rem; color: var(--text-subtle);">
+            🌱 <em>Objective realities and skill requirements update automatically with your selection.</em>
+          </div>
+        </div>
+
+        <div class="card glass-card" style="border-top: 4px solid var(--deep-navy); padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-navy">Parent / Alternative</span>
+            <span class="badge badge-navy">Financial Peace</span>
+          </div>
+          <h4 style="color: var(--deep-navy); margin-bottom: 0.5rem; font-size: 1.25rem;">👨‍👩‍👧 Alternative Pathway Reality</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem; line-height: 1.5;">
+            Compare tuition budgets, campus recruitment stability, and recognized credentials side-by-side with student aspirations.
+          </p>
+          <div style="font-size: 0.82rem; color: var(--text-subtle);">
+            ⚖️ <em>Generates actionable compromise routes and guided dinner discussion prompts.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guided Discussion Questions -->
+      <div class="card glass-card" style="margin-top: 2rem; border-left: 4px solid var(--primary-blue); padding: 1.75rem;">
+        <h3 style="font-size: 1.2rem; color: var(--deep-navy); margin-bottom: 0.75rem;">💬 Guided Family Discussion Prompts</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Use these open-ended questions during family dinner to move from confrontation to mutual clarity:
+        </p>
+        <ul id="discussion-questions-list" style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-main); line-height: 1.8;">
+          <li>What specific day-to-day work activities sound most energizing to the student?</li>
+          <li>What are our family's practical safety-net boundaries regarding tuition loans and degree recognition?</li>
+          <li>What small, low-risk project or scholarship search can we test together this month?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         2. THREE-LANGUAGE TRANSLATION IN PARENT–STUDENT BRIDGE (NON-AI)
+         Positioned immediately after Reality Check and immediately before Compare Form
+    ════════════════════════════════════════════════════════════════════════════ -->
+    <section id="section-parent-voice-inline" class="card glass-card pv-inline-section" style="margin-bottom: 3rem; padding: 2rem;">
+      
+      <!-- Section Header -->
+      <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="badge badge-mint" style="margin-bottom: 0.4rem;">🌐 3-Language Translation</span>
+            <h3 style="font-size: 1.35rem; margin: 0.2rem 0 0.35rem; color: var(--deep-navy);">
+              Understand Your Child's Career — In Your Language
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">
+              Listen to career information in Telugu, Hindi, or English, and ask questions using your voice.
+            </p>
+          </div>
+          <div class="trans-engine-badge">
+            <span class="badge badge-navy" style="font-weight: 600;">⚡ Instant Non-AI Engine</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Language Selector Row with Swap Button -->
+      <div class="trans-lang-bar" style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(0, 102, 204, 0.15); border-radius: var(--radius-md);">
+        
+        <!-- Translate From Dropdown -->
+        <div class="trans-select-group" style="display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 220px;">
+          <label for="trans-from-lang" class="trans-label" style="font-weight: 700; color: var(--deep-navy); white-space: nowrap; margin-bottom: 0;">
+            Translate from:
+          </label>
+          <select id="trans-from-lang" class="form-control trans-select" aria-label="Translate from language">
+            <option value="en" selected>English (en-IN)</option>
+            <option value="te">Telugu — తెలుగు (te-IN)</option>
+            <option value="hi">Hindi — हिन्दी (hi-IN)</option>
+          </select>
+        </div>
+
+        <!-- Language Swap Button -->
+        <button type="button" id="trans-btn-swap" class="btn btn-outline-primary trans-swap-btn" title="Swap Languages (⇄)" aria-label="Swap source and target languages" style="width: 44px; height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; border-radius: 50%; flex-shrink: 0;">
+          ⇄
+        </button>
+
+        <!-- Translate To Dropdown -->
+        <div class="trans-select-group" style="display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 220px;">
+          <label for="trans-to-lang" class="trans-label" style="font-weight: 700; color: var(--deep-navy); white-space: nowrap; margin-bottom: 0;">
+            Translate to:
+          </label>
+          <select id="trans-to-lang" class="form-control trans-select" aria-label="Translate to language">
+            <option value="te" selected>Telugu — తెలుగు (te-IN)</option>
+            <option value="hi">Hindi — हिन्दी (hi-IN)</option>
+            <option value="en">English (en-IN)</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Source Text Area Card -->
+      <div class="trans-source-card" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(0, 102, 204, 0.12); border-radius: var(--radius-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+          <label for="trans-source-text" style="font-weight: 700; color: var(--deep-navy); font-size: 0.95rem; margin-bottom: 0;">
+            📝 Source Career Information:
+          </label>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <!-- Voice Input Mic Button -->
+            <button type="button" id="pv-inline-btn-mic" class="btn btn-outline-primary btn-sm" title="Ask a Question by Voice" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; font-size: 0.8rem; font-weight: 700;">
+              <span>🎙️</span>
+              <span>Ask a Question by Voice</span>
+            </button>
+            <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">
+              💡 Pre-populated from student's selection
+            </span>
+          </div>
+        </div>
+
+        <textarea id="trans-source-text" class="form-control" rows="4" style="resize: vertical; font-size: 0.95rem; line-height: 1.6; border-radius: var(--radius-sm);" placeholder="Ask a question about your child's career... Enter details or questions to translate" aria-label="Source text to translate"></textarea>
+        <input type="hidden" id="pv-inline-question-input" value="">
+
+        <!-- Source Action Buttons -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; flex-wrap: wrap; gap: 0.75rem;">
+          <button type="button" id="trans-btn-clear" class="btn btn-outline-secondary btn-sm" aria-label="Clear source text">
+            ✕ Clear
+          </button>
+          <button type="button" id="trans-btn-translate" class="btn btn-primary trans-btn-prominent" aria-label="Translate text" style="padding: 0.55rem 1.75rem; font-weight: 700; font-size: 0.98rem; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);">
+            <span id="pv-inline-btn-send" style="display: none;"></span>
+            <span>Translate</span> ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Status / Error Notice Area -->
+      <div id="trans-status-msg" class="trans-notice" style="display: none; margin-bottom: 1.5rem;" role="alert"></div>
+
+      <!-- Translated Result Card -->
+      <div id="trans-result-card" class="trans-result-card" style="padding: 1.5rem; background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(0, 102, 204, 0.2); border-left: 5px solid var(--primary-blue); border-radius: var(--radius-md); box-shadow: 0 4px 18px rgba(0, 51, 102, 0.06);">
+        
+        <div class="trans-result-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(0, 102, 204, 0.12);">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.2rem;">✨</span>
+            <strong style="color: var(--deep-navy); font-size: 1.05rem;">Translated Result</strong>
+            <span id="trans-result-lang-badge" class="badge badge-navy" style="font-size: 0.78rem;">Telugu (te-IN)</span>
+          </div>
+
+          <div class="trans-result-toolbar" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <!-- Copy Translation Button -->
+            <button type="button" id="trans-btn-copy" class="btn btn-outline-primary btn-sm" title="Copy Translation" aria-label="Copy Translation">
+              <span id="trans-copy-icon">📋</span>
+              <span id="trans-copy-label">Copy Translation</span>
+            </button>
+
+            <!-- Speaker / Text-to-Speech Button -->
+            <button type="button" id="trans-btn-listen" class="btn btn-primary btn-sm" title="Listen to Career Guidance" aria-label="Listen to Career Guidance">
+              <span>🔊</span>
+              <span id="trans-listen-label">Listen to Career Guidance</span>
+            </button>
+            <span id="pv-inline-btn-listen" style="display: none;"></span>
+
+            <!-- Audio Sub-controls -->
+            <button type="button" id="trans-btn-pause" class="btn btn-outline-primary btn-sm" title="Pause Speech" style="display: none;" aria-label="Pause playback">
+              ⏸️ Pause
+            </button>
+            <span id="pv-inline-btn-pause" style="display: none;"></span>
+
+            <button type="button" id="trans-btn-resume" class="btn btn-outline-primary btn-sm" title="Resume Speech" style="display: none;" aria-label="Resume playback">
+              ▶️ Resume
+            </button>
+            <span id="pv-inline-btn-resume" style="display: none;"></span>
+
+            <button type="button" id="pv-inline-btn-replay" class="btn btn-outline-secondary btn-sm" title="Replay Speech" style="display: none;" aria-label="Replay playback">
+              🔁 Replay
+            </button>
+
+            <button type="button" id="trans-btn-stop" class="btn btn-outline-secondary btn-sm" title="Stop Audio" style="display: none;" aria-label="Stop playback">
+              ⏹️ Stop
+            </button>
+            <span id="pv-inline-btn-stop" style="display: none;"></span>
+          </div>
+        </div>
+
+        <!-- Read-Only Translated Result Body -->
+        <div id="trans-result-body" class="trans-result-body" tabindex="0" role="region" aria-label="Translated Result" style="font-size: 1.02rem; line-height: 1.7; color: var(--deep-navy); min-height: 64px; padding: 0.75rem 0.5rem; user-select: text;">
+          Click <strong style="color: var(--primary-blue);">Translate ➔</strong> to translate student career information into your chosen language.
+        </div>
+
+        <!-- Speech Synthesis Audio Waveform -->
+        <div id="trans-speech-wave" class="pv-inline-wave" style="display: none; margin-top: 1rem; align-items: center;">
+          <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+          <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary-blue); margin-left: 8px;">
+            Speaking in <span id="trans-wave-lang-name">Telugu (te-IN)</span>...
+          </span>
+        </div>
+
+        <!-- Voice Availability Notice -->
+        <div id="trans-voice-notice" style="display: none; margin-top: 0.75rem; font-size: 0.82rem; color: var(--text-muted); padding: 0.5rem 0.75rem; background: rgba(0, 102, 204, 0.05); border-radius: var(--radius-sm);"></div>
+
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         3. SIDE-BY-SIDE CAREER SELECTOR FORM
+         Positioned immediately after the new section
+    ════════════════════════════════════════════════ -->
+    <form id="compare-form" class="card glass-card" style="margin-bottom: 2.5rem; padding: 2rem;">
+      <h3 style="margin-bottom: 0.25rem; font-size: 1.35rem; color: var(--deep-navy);">Compare Two Specific Pathways</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0 0 1.25rem 0;">Analyze two distinct career trajectories side-by-side with objective educational and financial realities.</p>
+
+      <div class="compare-grid" style="margin-top: 0;">
+        
+        <!-- Student Selection -->
+        <div class="compare-column student-col" style="padding: 1.5rem; background: rgba(255,255,255,0.6); border-radius: var(--radius-md); border-top: 4px solid var(--primary-blue);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h4 style="color: var(--primary-blue); margin-bottom: 0;">🎓 Student's Choice</h4>
+            <span class="badge badge-mint">Primary Preference</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="student_career_id">Select Preferred Career *</label>
+            <select class="form-control" id="student_career_id" name="student_career_id" required>
+              <option value="">-- Choose Career --</option>
+              {% for c in careers %}
+              <option value="{{ c.id }}">{{ c.title }} ({{ c.category }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="student_reasons">Why is the student excited about this? *</label>
+            <textarea class="form-control" id="student_reasons" name="student_reasons" rows="3" placeholder="e.g. I enjoy coding, designing systems, or working hands-on with site drawings." required></textarea>
+          </div>
+        </div>
+
+        <!-- Alternative / Parent Selection -->
+        <div class="compare-column parent-col" style="padding: 1.5rem; background: rgba(255,255,255,0.6); border-radius: var(--radius-md); border-top: 4px solid var(--deep-navy);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h4 style="color: var(--deep-navy); margin-bottom: 0;">👨‍👩‍👧 Parent / Alternative Choice</h4>
+            <span class="badge badge-navy">Alternative / Backup</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="alternative_career_id">Select Alternative Career *</label>
+            <select class="form-control" id="alternative_career_id" name="alternative_career_id" required>
+              <option value="">-- Choose Career --</option>
+              {% for c in careers %}
+              <option value="{{ c.id }}">{{ c.title }} ({{ c.category }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="alternative_reasons">Why is this alternative recommended? *</label>
+            <textarea class="form-control" id="alternative_reasons" name="alternative_reasons" rows="3" placeholder="e.g. Concerned about stability, tuition costs, or want a well-recognized professional degree." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shared Agreement Action Step -->
+      <div class="form-group" style="margin-top: 1.5rem;">
+        <label class="form-label" for="shared_decision_summary">Shared Understanding &amp; Immediate Next Action</label>
+        <p class="form-hint" style="margin-bottom: 0.5rem;">What small next step or trial experiment can student and parent agree to investigate together?</p>
+        <input type="text" class="form-control" id="shared_decision_summary" name="shared_decision_summary" placeholder="e.g. Student will complete 1 beginner project this month; parent will research government scholarship criteria.">
+      </div>
+
+      <div style="text-align: right; margin-top: 1.5rem;">
+        <button type="submit" id="btn-submit-compare" class="btn btn-primary">
+          Generate Side-by-Side Comparison &amp; Save Bridge 🚀
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FLOATING AI VOICE BUTTON (RIGHT-SIDE VIEWPORT)
+════════════════════════════════════════════════════════════════════════════ -->
+<button id="floating-parent-voice-btn" class="floating-parent-voice-btn pv-trigger-btn" type="button" aria-label="Open AI Career Guide for Parents in your language" title="AI Career Guide for Parents: Listen in your language">
+  <div class="fpv-icon-wrap">
+    <!-- Combined SVG: Speech Bubble + Microphone + Sound Waves -->
+    <svg class="fpv-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Outer Speech Bubble -->
+      <path d="M4 14C4 8.47715 8.47715 4 14 4H18C23.5228 4 28 8.47715 28 14C28 19.5228 23.5228 24 18 24H12L6 28V22.8284C4.73948 20.4735 4 17.3486 4 14Z" fill="#2563EB" stroke="#FFFFFF" stroke-width="1.8"/>
+      <!-- Inner Microphone Capsule -->
+      <rect x="13.5" y="8" width="5" height="8" rx="2.5" fill="#FFFFFF"/>
+      <path d="M11 13C11 15.7614 13.2386 18 16 18C18.7614 18 21 15.7614 21 13" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M16 18V21M13.5 21H18.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Sound Wave Radiations -->
+      <path d="M23 10C24.5 11.5 25.2 13 25.2 14.5C25.2 16 24.5 17.5 23 19" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M9 10C7.5 11.5 6.8 13 6.8 14.5C6.8 16 7.5 17.5 9 19" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="fpv-pulse-glow" aria-hidden="true"></span>
+  </div>
+  <div class="fpv-text-col">
+    <span class="fpv-title">AI Career Guide for Parents</span>
+    <span class="fpv-subtitle">Listen in your language</span>
+  </div>
+</button>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MULTILINGUAL AI CAREER CONVERSATION PANEL / MODAL
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="parent-voice-modal" class="pv-modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="pv-modal-title">
+  <div class="pv-modal-container glass-card">
+    
+    <!-- Modal Header -->
+    <div class="pv-modal-header">
+      <div class="pv-header-left">
+        <div class="pv-header-icon-badge" aria-hidden="true">
+          <span>🎙️</span>
+        </div>
+        <div>
+          <h3 id="pv-modal-title" class="pv-title">Let's Talk About Your Child's Future</h3>
+          <p class="pv-subtitle">Understand your child's interests, possible career paths, education options, and practical next steps in your preferred language.</p>
+        </div>
+      </div>
+      <button type="button" id="pv-close-btn" class="pv-close-btn" aria-label="Close AI Career Guide Dialog">✕</button>
+    </div>
+
+    <!-- Student Profile Data Context Bar -->
+    <div id="pv-student-context-bar" class="pv-context-bar">
+      <!-- Populated dynamically by parent_voice.js -->
+    </div>
+
+    <!-- Language Selector Section -->
+    <div class="pv-lang-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+        <span class="pv-lang-label">Choose Preferred Language (భాష / भाषा):</span>
+        <span class="badge badge-mint" style="font-size: 0.72rem;">Indian Speech Synthesis</span>
+      </div>
+      <div class="pv-lang-pills" role="radiogroup" aria-label="Select preferred language">
+        <button type="button" class="pv-lang-pill" data-lang="te" role="radio" aria-checked="false">
+          <span class="pv-pill-native">1. తెలుగు</span>
+          <span class="pv-pill-code">Telugu (te-IN)</span>
+        </button>
+        <button type="button" class="pv-lang-pill" data-lang="hi" role="radio" aria-checked="false">
+          <span class="pv-pill-native">2. हिन्दी</span>
+          <span class="pv-pill-code">Hindi (hi-IN)</span>
+        </button>
+        <button type="button" class="pv-lang-pill active" data-lang="en" role="radio" aria-checked="true">
+          <span class="pv-pill-native">3. English</span>
+          <span class="pv-pill-code">English (en-IN)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Start AI Conversation Call-to-Action -->
+    <div id="pv-start-banner" class="pv-start-banner">
+      <button type="button" id="pv-btn-start" class="btn btn-primary pv-btn-start">
+        <span>✨ Start AI Conversation</span>
+        <span style="font-size: 0.85rem; font-weight: 500; opacity: 0.9;">(Generate explanation &amp; speak aloud)</span>
+      </button>
+    </div>
+
+    <!-- TTS Audio Player & Status Controls -->
+    <div id="pv-audio-bar" class="pv-audio-bar" style="display: none;">
+      <div class="pv-audio-status">
+        <span id="pv-voice-indicator" class="pv-voice-badge">🔊 Initializing Voice...</span>
+        <div id="pv-speaking-indicator" class="pv-speaking-indicator" style="display: none;">
+          <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+          <span style="font-size: 0.76rem; color: var(--primary-blue); font-weight: 700; margin-left: 4px;">Speaking Aloud</span>
+        </div>
+      </div>
+      <div class="pv-audio-controls">
+        <button type="button" id="pv-audio-play" class="btn-audio-ctrl" title="Play / Speak Current Text">🔊 Speak</button>
+        <button type="button" id="pv-audio-pause" class="btn-audio-ctrl" title="Pause Speech" style="display: none;">⏸️ Pause</button>
+        <button type="button" id="pv-audio-resume" class="btn-audio-ctrl" title="Resume Speech" style="display: none;">▶️ Resume</button>
+        <button type="button" id="pv-audio-replay" class="btn-audio-ctrl" title="Replay from Beginning">🔁 Replay</button>
+        <button type="button" id="pv-audio-stop" class="btn-audio-ctrl" title="Stop Audio">⏹️ Stop</button>
+      </div>
+    </div>
+
+    <!-- Voice Availability Notice -->
+    <div id="pv-voice-notice" class="pv-voice-notice" style="display: none;"></div>
+
+    <!-- Conversation Transcript -->
+    <div id="pv-transcript" class="pv-transcript" role="log" aria-live="polite">
+      <div class="pv-empty-state">
+        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">👨‍👩‍👧‍👦</div>
+        <strong style="color: var(--deep-navy); font-size: 1rem;">Welcome to the Parent Career Guide</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 480px; margin: 0.5rem auto 0;">
+          Select your preferred language above and click <strong>"Start AI Conversation"</strong> to hear a clear, respectful explanation of your child's selected career, required education, and costs.
+        </p>
+      </div>
+    </div>
+
+    <!-- Dynamic Suggested Questions -->
+    <div id="pv-suggestions-section" class="pv-suggestions-section" style="display: none;">
+      <div class="pv-suggestions-label">💡 Suggested Questions for Parents:</div>
+      <div id="pv-suggestions-chips" class="pv-suggestions-chips">
+        <!-- Rendered dynamically according to selected language -->
+      </div>
+    </div>
+
+    <!-- Chat Composer with Microphone & Send Button -->
+    <div class="pv-composer-wrap">
+      <div class="pv-composer-box">
+        <button type="button" id="pv-btn-mic" class="pv-mic-btn" title="Speak your question (Voice Input)" aria-label="Speak your question using microphone">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="22"/>
+          </svg>
+        </button>
+        <input type="text" id="pv-question-input" class="pv-input" placeholder="Ask a question about your child's education, costs, or alternatives..." aria-label="Ask a question about your child's career">
+        <button type="button" id="pv-btn-send" class="btn btn-primary pv-send-btn" aria-label="Send question">
+          <span>Send</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+      <div id="pv-mic-status" class="pv-mic-status" style="display: none;">
+        <span class="pv-mic-pulse-dot"></span>
+        <span>Listening... Please speak your question in <strong id="pv-mic-lang-label">English</strong></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.CAREERCOMPASS_COMPARISON_ID = "{{ comparison_id or '' }}";
+  window.CAREERCOMPASS_ASSESSMENT_ID = "{{ assessment_id or '' }}";
+  window.CAREERCOMPASS_ASSESSMENT_DATA = {{ assessment_data|tojson|safe if assessment_data else 'null' }};
+</script>
+<script src="{{ url_for('static', filename='js/compare.js') }}"></script>
+<script src="{{ url_for('static', filename='js/parent_voice.js') }}"></script>
+{% endblock %}
+

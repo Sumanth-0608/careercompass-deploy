@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Error {{ code or '' }} — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; text-align: center; padding: 4rem 1rem;">
+  <div class="card" style="padding: 3rem 2rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🧭</div>
+    <h2 style="margin-bottom: 0.75rem;">Notice ({{ code or 'Error' }})</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+      {{ message or "An unexpected issue occurred. Please return to the homepage or try again." }}
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center;">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Return Home</a>
+      <a href="{{ url_for('quiz') }}" class="btn btn-secondary">Take Assessment</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

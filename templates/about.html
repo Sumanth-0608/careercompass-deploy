@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}About & How It Works — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="section-header" style="text-align: left; margin-bottom: 2.5rem;">
+    <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Platform Architecture & Ethics</span>
+    <h2>About CareerCompass & How It Works</h2>
+    <p>
+      An open, explainable career discovery platform built to restore student agency and foster constructive family dialogue.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 2.5rem;">
+    <h3 style="margin-bottom: 1rem;">🎯 Our Mission</h3>
+    <p>
+      Students often choose careers because of peer influence, parental pressure, or marketing hype from commercial coaching institutes. They frequently lack awareness of what daily work actually entails, how much education truly costs, or what practical low-cost alternatives exist.
+    </p>
+    <p style="margin-bottom: 0;">
+      <strong>CareerCompass</strong> does not tell a student what they "must" become. Instead, it acts as a transparent, informative compass: mapping interests, testing assumptions with starter projects, highlighting financial pathways, and providing a respectful bridge for parents and students to discuss choices collaboratively.
+    </p>
+  </div>
+
+  <!-- Scoring Algorithm Deep Dive -->
+  <div class="card" style="margin-bottom: 2.5rem;" id="algorithm">
+    <h3 style="margin-bottom: 1rem;">🧮 How the Transparent Matching Engine Works</h3>
+    <p>
+      Unlike black-box generative AI models that hallucinate facts or produce unverifiable advice, CareerCompass uses a fully auditable 100-point multi-factor rule engine:
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); border-top: 4px solid var(--primary-blue); border: 1px solid var(--glass-border);">
+        <strong style="font-size: 1.1rem; color: var(--text-heading);">1. Interests (35%)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Measures overlap between student curiosity and career domains, with bonus weighting for favorite school subjects.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); border-top: 4px solid var(--primary-blue); border: 1px solid var(--glass-border);">
+        <strong style="font-size: 1.1rem; color: var(--text-heading);">2. Strengths (25%)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Aligns natural cognitive capabilities (e.g. analytical problem-solving, empathy, communication, creativity) with role demands.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); border-top: 4px solid var(--primary-blue); border: 1px solid var(--glass-border);">
+        <strong style="font-size: 1.1rem; color: var(--text-heading);">3. Work Style (15%)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Evaluates day-to-day work environment preference: hands-on tinkering, people-oriented care, research, or solo focus.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); border-top: 4px solid var(--deep-navy); border: 1px solid var(--glass-border);">
+        <strong style="font-size: 1.1rem; color: var(--text-heading);">4. Life Goals (15%)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Considers long-term aspirations: stability, social impact, continuous learning, independence, or entrepreneurship.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); border-top: 4px solid var(--deep-navy); border: 1px solid var(--glass-border);">
+        <strong style="font-size: 1.1rem; color: var(--text-heading);">5. Education Fit (10%)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Reviews current stream compatibility and outlines required bridge courses or prerequisites where applicable.
+        </p>
+      </div>
+    </div>
+
+    <div style="background: var(--pale-blue); border: 1px solid rgba(59, 130, 246, 0.25); border-left: 4px solid var(--primary-blue); padding: 1rem; border-radius: var(--radius-sm);">
+      <strong style="color: var(--deep-navy);">Equity Guarantee:</strong>
+      A student is <strong>never eliminated</strong> from exploring a career due to budget or location constraints. For careers with high traditional costs (such as medicine or engineering), the engine highlights government merit institutions, polytechnic routes, and public scholarship pathways.
+    </div>
+  </div>
+
+  <!-- Disclaimers & Ethics -->
+  <div class="card" style="margin-bottom: 2.5rem;" id="disclaimers">
+    <h3 style="margin-bottom: 1rem; color: #991b1b;">⚖️ Limitations, Disclaimers & Ethics</h3>
+    <ul style="padding-left: 1.25rem; line-height: 1.8; color: var(--text-muted);">
+      <li><strong>No Psychometric Assessment Claim:</strong> CareerCompass is an educational exploration tool, not a clinical psychiatric evaluation or certified psychometric diagnostic.</li>
+      <li><strong>No Guarantees of Admission or Employment:</strong> Completing roadmaps, matching scores, or starter projects does not guarantee college admission, examination success, or employment.</li>
+      <li><strong>No Live Salary Speculation:</strong> We avoid unsubstantiated salary or placement promises. Tuition cost categories are approximate estimates derived from public university registries.</li>
+      <li><strong>Preserving Student Agency:</strong> A parent's opinion is presented alongside the student's, but never silently replaces or overrides the student's choices.</li>
+    </ul>
+  </div>
+
+  <!-- Data Sources -->
+  <div class="card" id="sources">
+    <h3 style="margin-bottom: 1rem;">📚 Data Sources & Verification</h3>
+    <p>Our catalog entries are cross-referenced against reputable public occupational databases and statutory bodies:</p>
+    <ul style="padding-left: 1.25rem; line-height: 1.8; color: var(--text-muted);">
+      <li><strong>United States Bureau of Labor Statistics (BLS):</strong> Occupational Outlook Handbook.</li>
+      <li><strong>National Career Service (NCS, Govt of India):</strong> National occupational descriptions and qualifications.</li>
+      <li><strong>All India Council for Technical Education (AICTE):</strong> Approved engineering & polytechnic curricula.</li>
+      <li><strong>National Medical Commission (NMC) & Indian Nursing Council:</strong> Statutory licensing standards for clinical healthcare.</li>
+      <li><strong>Institute of Chartered Accountants of India (ICAI):</strong> Chartered accountancy qualification frameworks.</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

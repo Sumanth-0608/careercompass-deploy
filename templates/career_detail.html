@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}{{ career.title }} — Reality Check & Career Details — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Career Hero Header -->
+  <div class="card" style="margin-bottom: 2rem; border-left: 5px solid var(--primary-blue);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+          <span class="badge badge-navy">{{ career.category }}</span>
+          <span class="badge badge-mint">{{ career.cost_category }}</span>
+          {% if career.regulated %}
+          <span class="badge badge-regulated">Statutory Licensure Required</span>
+          {% endif %}
+        </div>
+        <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">{{ career.title }}</h1>
+        <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 800px; margin-bottom: 1.25rem;">
+          {{ career.short_description }}
+        </p>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="{{ url_for('roadmap_view', career_id=career.id) }}" class="btn btn-primary">
+            🗺️ Start Personalized Roadmap
+          </a>
+          <a href="{{ url_for('opportunities_view') }}?category={{ career.category|urlencode }}" class="btn btn-outline" style="border-color: var(--primary-blue);">
+            💼 View Opportunities
+          </a>
+          <a href="{{ url_for('compare_view', student_career_id=career.id) }}" class="btn btn-secondary">
+            🤝 Compare in Parent–Student Bridge
+          </a>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-md); font-size: 0.85rem; min-width: 260px;">
+        <div style="margin-bottom: 0.5rem;"><strong>Min Education:</strong> {{ career.min_education_level }}</div>
+        <div style="margin-bottom: 0.5rem;"><strong>Category:</strong> {{ career.category }}</div>
+        <div style="margin-bottom: 0.5rem;"><strong>Regulated License:</strong> {{ "Yes (Statutory Council)" if career.regulated else "No (Skills / Portfolio Driven)" }}</div>
+        {% if career.last_verified %}
+        <div style="color: var(--text-subtle);"><strong>Last Verified:</strong> {{ career.last_verified }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Content Grid -->
+  <div class="detail-grid">
+    <!-- Left Column: Core Insights & Reality Checks -->
+    <div>
+      <!-- Day to Day Responsibilities -->
+      <section class="reality-box">
+        <h3>📋 Typical Day-to-Day Responsibilities</h3>
+        <p class="form-hint">Illustrative day-to-day duties based on industry standards:</p>
+        <ul style="padding-left: 1.25rem; color: var(--text-muted); line-height: 1.7;">
+          {% for resp in career.typical_responsibilities %}
+          <li style="margin-bottom: 0.5rem;">{{ resp }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <!-- Advantages vs Challenges (Pros & Cons) -->
+      <section class="reality-box">
+        <h3>⚖️ Reality Check: Trade-offs & Expectations</h3>
+        <div class="pros-cons-grid">
+          <div class="pros-column">
+            <h4>✅ Key Advantages</h4>
+            <ul style="padding-left: 1.2rem; font-size: 0.9rem; color: #065f46;">
+              {% for adv in career.advantages %}
+              <li style="margin-bottom: 0.5rem;">{{ adv }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="cons-column">
+            <h4>⚠️ Challenges & Hard Realities</h4>
+            <ul style="padding-left: 1.2rem; font-size: 0.9rem; color: #92400e;">
+              {% for ch in career.challenges %}
+              <li style="margin-bottom: 0.5rem;">{{ ch }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Suggested Starter Project -->
+      <section class="reality-box">
+        <h3>🧪 Suggested Beginner Starter Projects</h3>
+        <p class="form-hint">The best reality check is trying a micro-project before committing years of education:</p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for proj in career.suggested_beginner_projects %}
+          <div style="background: var(--bg-subtle); border-left: 4px solid var(--primary-blue); padding: 1rem; border-radius: var(--radius-sm);">
+            <strong>Project {{ loop.index }}:</strong> {{ proj }}
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Educational Qualifications & Entrance Exams -->
+      <section class="reality-box">
+        <h3>🎓 Educational Eligibility & Qualifications</h3>
+        <p><strong>Standard Path:</strong> {{ career.educational_requirements }}</p>
+        
+        {% if career.entrance_exams and career.entrance_exams|length > 0 %}
+        <div style="margin-top: 1rem;">
+          <strong>Relevant Entrance Examinations:</strong>
+          <div class="chip-grid" style="margin-top: 0.5rem;">
+            {% for exam in career.entrance_exams %}
+            <span class="badge badge-navy" style="font-size: 0.85rem;">{{ exam }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if career.geographic_considerations %}
+        <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">
+          <strong>Geographic & Market Dynamics:</strong> {{ career.geographic_considerations }}
+        </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <!-- Right Column: Costs, Skills & Sources -->
+    <div>
+      <!-- Education Cost Reality Check -->
+      <section class="reality-box" style="border-top: 4px solid var(--primary-blue);">
+        <h3>💰 Financial Reality Check</h3>
+        <div style="margin-bottom: 1rem;">
+          <span class="badge badge-mint" style="margin-bottom: 0.5rem;">{{ career.cost_category }}</span>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            <strong>Estimated Cost:</strong><br>{{ career.cost_estimate_detail }}
+          </p>
+        </div>
+
+        <div style="background: var(--pale-blue); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: var(--radius-sm); padding: 1rem;">
+          <h4 style="color: var(--deep-navy); font-size: 0.95rem; margin-bottom: 0.35rem;">🌱 Low-Cost Alternative Routes</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">
+            {{ career.low_cost_routes }}
+          </p>
+        </div>
+      </section>
+
+      <!-- Important Skills -->
+      <section class="reality-box">
+        <h3>🛠️ Key Skills to Master</h3>
+        <div class="chip-grid">
+          {% for skill in career.important_skills %}
+          <span class="chip-label" style="cursor: default;">{{ skill }}</span>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Verified Sources & Citations -->
+      <section class="reality-box">
+        <h3>📚 Source Citations & References</h3>
+        <p style="font-size: 0.85rem; color: var(--text-subtle);">
+          Factual data sourced from official public registries and occupational guides:
+        </p>
+        {% if career.source_urls and career.source_urls|length > 0 %}
+        <ul style="padding-left: 1.25rem; font-size: 0.85rem;">
+          {% for src in career.source_urls %}
+          <li style="margin-bottom: 0.5rem;">
+            <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-navy-light); text-decoration: underline;">
+              {{ src.title }} &nearr;
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Compiled from standard national occupational frameworks.</p>
+        {% endif %}
+      </section>
+
+      <!-- Related Careers -->
+      {% if related_careers and related_careers|length > 0 %}
+      <section class="reality-box">
+        <h3>🔄 Related Pathways</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for rel in related_careers %}
+          <a href="{{ url_for('career_detail', career_id=rel.id) }}" class="card" style="padding: 1rem; text-decoration: none; color: inherit; display: block;">
+            <strong style="font-size: 0.95rem; color: var(--primary-navy);">{{ rel.title }}</strong>
+            <p style="font-size: 0.8rem; color: var(--text-subtle); margin: 0.25rem 0 0;">{{ rel.category }}</p>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

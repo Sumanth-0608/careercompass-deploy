@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}Career Reality Simulator — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Page Header -->
+  <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+    <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Interactive Scenario Explorer</span>
+    <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Explore your possibilities.</h1>
+    <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0;">
+      Change your circumstances and see how your career options, learning routes, and trade-offs change.
+    </p>
+  </div>
+
+  <!-- Transparent Ethics Disclaimer Banner -->
+  <div class="disclaimer-banner" style="margin-top: 0; margin-bottom: 2rem; border-left: 4px solid var(--accent-mint);">
+    <span class="icon">⚖️</span>
+    <div>
+      <strong>Guidance Notice:</strong>
+      The Career Reality Simulator explains how different circumstances shift career compatibility and educational routes. It does <em>not</em> predict future career success, claim any pathway is perfect, or guarantee job placement.
+    </div>
+  </div>
+
+  <!-- Dual Control Panels: Scenario A (Current) vs Scenario B (What-If) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    
+    <!-- Panel A: Current Scenario (Baseline Profile) -->
+    <div class="card" style="border-top: 5px solid var(--deep-navy);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.25rem; color: var(--text-heading); margin: 0;">📍 Current Profile (Scenario A)</h3>
+        <span class="badge badge-navy">Baseline</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-subtle); margin-bottom: 1rem;">
+        Your starting baseline. Initialized with demo defaults or your saved assessment.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="base_budget">Education Budget</label>
+        <select class="form-control" id="base_budget">
+          <option value="very_limited" {% if initial_profile.education_budget == 'very_limited' %}selected{% endif %}>Very limited (Self-learning / High scholarship need)</option>
+          <option value="low" {% if initial_profile.education_budget == 'low' %}selected{% endif %}>Low (Government / Subsidized college)</option>
+          <option value="moderate" {% if initial_profile.education_budget == 'moderate' %}selected{% endif %}>Moderate (Standard regional / Public university)</option>
+          <option value="flexible" {% if initial_profile.education_budget == 'flexible' %}selected{% endif %}>Flexible (Private / Professional academy)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="base_style">Preferred Work Style</label>
+        <select class="form-control" id="base_style">
+          <option value="analytical" {% if initial_profile.work_style == 'analytical' %}selected{% endif %}>Analytical and problem-solving</option>
+          <option value="creative" {% if initial_profile.work_style == 'creative' %}selected{% endif %}>Creative and design-focused</option>
+          <option value="people" {% if initial_profile.work_style == 'people' %}selected{% endif %}>People-oriented and collaborative</option>
+          <option value="hands_on" {% if initial_profile.work_style == 'hands_on' %}selected{% endif %}>Hands-on and practical</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="base_priority">Career Priority</label>
+        <select class="form-control" id="base_priority">
+          <option value="growth" {% if initial_profile.priority == 'growth' %}selected{% endif %}>Learning and growth</option>
+          <option value="stability" {% if initial_profile.priority == 'stability' %}selected{% endif %}>Stability</option>
+          <option value="social_impact" {% if initial_profile.priority == 'social_impact' %}selected{% endif %}>Social impact</option>
+          <option value="independence" {% if initial_profile.priority == 'independence' %}selected{% endif %}>Flexibility and independence</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Panel B: What-If Controls (Alternative Profile) -->
+    <div class="card" style="border-top: 5px solid var(--primary-blue);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.25rem; color: var(--primary-blue); margin: 0;">🔮 What-If Controls (Scenario B)</h3>
+        <span class="badge badge-mint">Hypothetical</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-subtle); margin-bottom: 1rem;">
+        Change one or more variables to see how your career pathways and routes shift.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="alt_budget">Education Budget</label>
+        <select class="form-control" id="alt_budget">
+          <option value="very_limited">Very limited (Self-learning / High scholarship need)</option>
+          <option value="low">Low (Government / Subsidized college)</option>
+          <option value="moderate" selected>Moderate (Standard regional / Public university)</option>
+          <option value="flexible">Flexible (Private / Professional academy)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="alt_style">Preferred Work Style</label>
+        <select class="form-control" id="alt_style">
+          <option value="analytical">Analytical and problem-solving</option>
+          <option value="creative" selected>Creative and design-focused</option>
+          <option value="people">People-oriented and collaborative</option>
+          <option value="hands_on">Hands-on and practical</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="alt_priority">Career Priority</label>
+        <select class="form-control" id="alt_priority">
+          <option value="growth">Learning and growth</option>
+          <option value="stability" selected>Stability</option>
+          <option value="social_impact">Social impact</option>
+          <option value="independence">Flexibility and independence</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Action Controls -->
+  <div class="card" style="padding: 1.25rem; margin-bottom: 2.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <button type="button" id="btn-compare-scenarios" class="btn btn-primary">
+          <span>⚡ Compare Scenarios</span>
+        </button>
+        <button type="button" id="btn-reset-demo" class="btn btn-secondary">
+          <span>🔄 Reset to Demo Profile</span>
+        </button>
+      </div>
+
+      <div>
+        <button type="button" id="btn-save-scenario" class="btn btn-outline-mint" style="display: none;">
+          <span>💾 Save Comparison</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State Indicator -->
+  <div id="sim-loading" style="display: none; text-align: center; padding: 4rem 1rem;">
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚙️</div>
+    <h3>Simulating Scenario Variations...</h3>
+    <p style="color: var(--text-muted);">
+      Re-calculating multi-factor compatibility scores and updating educational route trade-offs.
+    </p>
+  </div>
+
+  <!-- Validation / Error Message Banner -->
+  <div id="sim-error-banner" class="card" style="display: none; background: #fef2f2; border-color: #fecaca; margin-bottom: 2rem;">
+    <strong style="color: #991b1b;">⚠️ Simulation Error:</strong>
+    <p id="sim-error-text" style="color: #b91c1c; margin: 0.25rem 0 0; font-size: 0.9rem;"></p>
+  </div>
+
+  <!-- Results Section -->
+  <div id="sim-results" style="display: none;">
+    
+    <!-- High-Level Explanations Box -->
+    <div class="card" style="margin-bottom: 2.5rem; background: #f8fafc; border-left: 6px solid var(--accent-mint);">
+      <h3 style="font-size: 1.35rem; color: var(--primary-navy); margin-bottom: 0.75rem;">
+        🔍 Key Insights: Why the Results Changed
+      </h3>
+      <ul id="sim-explanations-list" style="padding-left: 1.25rem; color: var(--text-muted); line-height: 1.8;">
+        <!-- Injected via JavaScript -->
+      </ul>
+    </div>
+
+    <!-- Side-by-Side Top 3 Recommendations -->
+    <div style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Top 3 Recommendations Per Scenario</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.75rem;">
+        
+        <!-- Current Scenario Column -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h4 style="color: var(--primary-navy); margin: 0;">Scenario A: Current Profile</h4>
+            <span class="badge badge-navy" id="badge-scenario-a-summary">Baseline</span>
+          </div>
+          <div id="recs-scenario-a" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- What-If Scenario Column -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h4 style="color: var(--accent-mint-hover); margin: 0;">Scenario B: What-If Profile</h4>
+            <span class="badge badge-mint" id="badge-scenario-b-summary">Hypothetical</span>
+          </div>
+          <div id="recs-scenario-b" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined Side-by-Side Career Movement Matrix -->
+    <div class="card" style="margin-bottom: 2.5rem;">
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 0.25rem;">
+          📊 Side-by-Side Compatibility & Ranking Changes
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-subtle); margin: 0;">
+          Tracking career pathways that entered, left, or maintained position in your top recommendations.
+        </p>
+      </div>
+
+      <div id="comparison-matrix-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Budget-Related Learning Route Trade-offs -->
+    <div class="card" id="budget-tradeoffs-card" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 0.5rem;">
+        💰 Education Route & Financial Trade-offs
+      </h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Education budget changes do not penalize your intrinsic career capability. Instead, they shift the feasible learning routes:
+      </p>
+
+      <div id="budget-tradeoffs-container" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Suggested Actions & Skill Development -->
+    <div class="card" style="background: #ffffff; margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 0.75rem;">
+        🎯 Suggested Next Steps & Exploratory Actions
+      </h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Before committing financial resources, validate your new preference through starter actions:
+      </p>
+      <div id="next-actions-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.CAREERCOMPASS_DEFAULT_DEMO = {{ demo_profile | tojson }};
+  window.CAREERCOMPASS_INITIAL_PROFILE = {{ initial_profile | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/simulator.js') }}"></script>
+{% endblock %}

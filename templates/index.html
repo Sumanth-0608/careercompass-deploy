@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+
+{% block title %}CareerCompass — Your future starts with understanding yourself.{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — Wide Two-Column Layout
+  ════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- Left: Text & CTAs -->
+      <div class="hero-content">
+        <span class="hero-eyebrow">🧭 CareerCompass</span>
+
+        <h1>Your future starts with <span style="color: var(--primary-blue);">understanding yourself.</span></h1>
+
+        <p>
+          Too many students choose careers under peer pressure, outdated assumptions, or incomplete information.
+          CareerCompass provides transparent, rule-based guidance to help students and parents discover meaningful
+          pathways tailored to real strengths, budgets, and personal goals.
+        </p>
+
+        <div class="hero-actions">
+          <a href="{{ url_for('quiz') }}" class="btn btn-lg btn-primary">
+            🧭 Discover My Career
+          </a>
+          <a href="{{ url_for('careers_catalog') }}" class="btn btn-lg btn-secondary">
+            📚 Explore Career Paths
+          </a>
+        </div>
+
+        <!-- Trust signals -->
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.75rem;">
+          <span style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 700; color: var(--text-muted);">
+            ✅ No black-box AI
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 700; color: var(--text-muted);">
+            ✅ Fully explainable scores
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 700; color: var(--text-muted);">
+            ✅ Student agency preserved
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Decorative Career Cards Visual -->
+      <div class="hero-visual">
+        <div class="hero-visual-card">
+          <div class="hero-visual-title">✨ Top Career Matches</div>
+          <div class="hero-visual-items">
+            <div class="hero-visual-item">
+              <div class="hero-visual-dot" style="background: #2563EB;"></div>
+              <div>
+                <span class="hero-visual-item-title">Software Engineer</span>
+                <span class="hero-visual-item-sub">Technology · Analytical</span>
+              </div>
+              <span class="hero-visual-score" style="background: #DBEAFE; color: #1D4ED8;">92%</span>
+            </div>
+            <div class="hero-visual-item">
+              <div class="hero-visual-dot" style="background: #7C3AED;"></div>
+              <div>
+                <span class="hero-visual-item-title">UX / Product Designer</span>
+                <span class="hero-visual-item-sub">Design · Creative</span>
+              </div>
+              <span class="hero-visual-score" style="background: #EDE9FE; color: #5B21B6;">87%</span>
+            </div>
+            <div class="hero-visual-item">
+              <div class="hero-visual-dot" style="background: #059669;"></div>
+              <div>
+                <span class="hero-visual-item-title">Data Scientist</span>
+                <span class="hero-visual-item-sub">Research · Problem-solving</span>
+              </div>
+              <span class="hero-visual-score" style="background: #D1FAE5; color: #065F46;">81%</span>
+            </div>
+            <div class="hero-visual-item">
+              <div class="hero-visual-dot" style="background: #D97706;"></div>
+              <div>
+                <span class="hero-visual-item-title">Civil Services (IAS)</span>
+                <span class="hero-visual-item-sub">Public Service · Leadership</span>
+              </div>
+              <span class="hero-visual-score" style="background: #FEF3C7; color: #92400E;">74%</span>
+            </div>
+          </div>
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(37,99,235,0.12); font-size: 0.8rem; color: var(--text-subtle); text-align: center;">
+            Scores generated after <a href="{{ url_for('quiz') }}" style="color: var(--primary-blue); font-weight: 700;">your free assessment →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CAREER INSPIRATION — Feature 3 Interactive Component
+  ════════════════════════════════════════════════ -->
+  <section class="card glass-card" id="home-inspiration-card" style="margin-bottom: 3.5rem; padding: 1.75rem 2rem; border-left: 4px solid var(--primary-blue);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <span class="badge badge-mint" style="font-size: 0.76rem;">💡 Career Inspiration · CareerCompass Guidance</span>
+          <span style="font-size: 0.8rem; color: var(--text-subtle);">Advice written for students</span>
+        </div>
+        <blockquote id="home-quote-text" style="font-size: 1.3rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.5rem; line-height: 1.35;">
+          "Your first career choice is a starting point, not a life sentence."
+        </blockquote>
+        <p id="home-quote-tip" style="font-size: 0.92rem; color: var(--text-muted); margin: 0 0 0.35rem; line-height: 1.5;">
+          Careers today are fluid. You can begin in one role, build transferable problem-solving skills, and transition into adjacent domains as your curiosity matures.
+        </p>
+        <span id="home-quote-action" style="font-size: 0.86rem; font-weight: 700; color: var(--primary-blue-hover);">
+          👉 Focus on building core strengths this semester rather than stressing about where you will be 20 years from now.
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;">
+        <button type="button" id="home-btn-prev-quote" class="btn btn-sm btn-outline" aria-label="Previous inspiration quote" style="padding: 0.4rem 0.8rem;">&larr; Prev</button>
+        <button type="button" id="home-btn-next-quote" class="btn btn-sm btn-outline" aria-label="Next inspiration quote" style="padding: 0.4rem 0.8rem;">Next &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       PROBLEM & SOLUTION — Two balanced glass cards
+  ════════════════════════════════════════════════ -->
+  <section style="margin-bottom: 3.5rem;">
+    <div class="problem-solution-grid">
+      <div class="card problem-card">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+          <span class="ps-icon">⚠️</span>
+          <h3 style="color: #DC2626; margin: 0;">The Problem</h3>
+        </div>
+        <p style="margin-bottom: 0; line-height: 1.7; color: var(--text-muted);">
+          Career choices are frequently influenced by hearsay, emotional parental anxiety, or hype around specific streams.
+          Students often discover the harsh reality of day-to-day work, financial costs, or strict licensure requirements
+          only after years of wasted tuition.
+        </p>
+      </div>
+
+      <div class="card solution-card">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+          <span class="ps-icon">💡</span>
+          <h3 style="color: var(--primary-blue); margin: 0;">The CareerCompass Solution</h3>
+        </div>
+        <p style="margin-bottom: 0; line-height: 1.7; color: var(--text-muted);">
+          We replace opaque algorithms with <strong>explainable matching</strong>, explicit reality checks, transparent
+          educational costs, low-cost alternatives, and a respectful Student–Parent Bridge so families can align without conflict.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FEATURES — 4-column grid
+  ════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <h2>Empowering Every Dimension of Career Planning</h2>
+    <p>A comprehensive toolkit designed to foster informed decision-making without replacing human agency.</p>
+  </div>
+
+  <section class="features-grid" style="margin-bottom: 3.5rem;">
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>Multi-Factor Self Discovery</h3>
+      <p>Assess your genuine interests, cognitive strengths, work styles, and life goals beyond just exam percentages.</p>
+      <a href="{{ url_for('quiz') }}" class="btn btn-sm btn-outline" style="margin-top: auto;">Take Quiz &rarr;</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🐍</div>
+      <h3>Interactive Snake Roadmap</h3>
+      <p>Spacious zigzag journey with stage groups (A–G), beginner micro-projects, and connected internship pathways.</p>
+      <a href="{{ url_for('roadmap_view') }}" class="btn btn-sm btn-outline" style="margin-top: auto;">Explore Roadmap &rarr;</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💼</div>
+      <h3>Verified Opportunities</h3>
+      <p>Location-aware portal discovery for internships, NATS apprenticeships, part-time jobs, and campus work.</p>
+      <a href="{{ url_for('opportunities_view') }}" class="btn btn-sm btn-outline" style="margin-top: auto;">Browse Jobs &rarr;</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🤝</div>
+      <h3>Parent–Student Bridge</h3>
+      <p>Compare two career paths side-by-side with guided discussion prompts so students and parents reach mutual respect.</p>
+      <a href="{{ url_for('compare_view') }}" class="btn btn-sm btn-outline" style="margin-top: auto;">Open Bridge &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       HOW IT WORKS — 3-column steps
+  ════════════════════════════════════════════════ -->
+  <section class="steps-section">
+    <div class="section-header">
+      <h2>How CareerCompass Works</h2>
+      <p>Simple, transparent, and completely offline-capable.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Take the Assessment</h3>
+        <p>Spend 3 minutes answering reflective questions about your favorite subjects, strengths, work style, and budget preferences.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Review Explainable Matches</h3>
+        <p>Explore at least 3 career pathways with detailed reality checks: typical days, costs, trade-offs, and alternative low-cost routes.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Build Roadmap &amp; Bridge</h3>
+        <p>Save your customized plan, check off progress milestones, and invite family to compare viewpoints with guided conversation prompts.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="{{ url_for('quiz') }}" class="btn btn-lg btn-primary">Start Your Free Discovery Now</a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       APPOINTMENTS DISCOVERY — Directly below CTA
+  ════════════════════════════════════════════════ -->
+  <section class="appointments-home-section" style="margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="section-header">
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2); padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.9rem;">📅</span>
+        <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary-blue);">Real-Time 1-on-1 Mentorship</span>
+      </div>
+      <h2>Take Your Next Step — Book an Appointment</h2>
+      <p>Talk through your options, practice an interview, or prepare for your next opportunity with verified practitioners.</p>
+    </div>
+
+    <div class="appointments-cards-grid">
+      <!-- 1. Career Guidance -->
+      <div class="card glass-card apt-preview-card">
+        <div class="apt-card-header">
+          <div class="apt-icon-wrap" style="background: rgba(37,99,235,0.1); color: #2563EB;">🧭</div>
+          <span class="badge badge-blue">Career Guidance</span>
+        </div>
+        <h3 style="font-size: 1.15rem; margin: 0.75rem 0 0.35rem; color: var(--text-heading);">1-on-1 Career Exploration</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+          Discuss your strengths, assessment matches, and suitable stream choices with a certified educational counsellor.
+        </p>
+        <div class="apt-card-footer">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-subtle);">⏱️ 40–45 mins · Free</span>
+          <a href="{{ url_for('appointments_view', category='Career Guidance') }}" class="btn btn-sm btn-outline">Explore Sessions &rarr;</a>
+        </div>
+      </div>
+
+      <!-- 2. Interview Prep -->
+      <div class="card glass-card apt-preview-card">
+        <div class="apt-card-header">
+          <div class="apt-icon-wrap" style="background: rgba(124,58,237,0.1); color: #7C3AED;">💻</div>
+          <span class="badge badge-purple">Mock Interview</span>
+        </div>
+        <h3 style="font-size: 1.15rem; margin: 0.75rem 0 0.35rem; color: var(--text-heading);">Interview Preparation</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+          Practice live coding problem-solving, behavioral STAR questions, and portfolio critiques with diagnostic feedback.
+        </p>
+        <div class="apt-card-footer">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-subtle);">⏱️ 45–60 mins · Free</span>
+          <a href="{{ url_for('appointments_view', category='Interview Preparation') }}" class="btn btn-sm btn-outline">Schedule Mock &rarr;</a>
+        </div>
+      </div>
+
+      <!-- 3. Employment & Internship Support -->
+      <div class="card glass-card apt-preview-card">
+        <div class="apt-card-header">
+          <div class="apt-icon-wrap" style="background: rgba(5,150,105,0.1); color: #059669;">💼</div>
+          <span class="badge badge-mint">Job &amp; Internship</span>
+        </div>
+        <h3 style="font-size: 1.15rem; margin: 0.75rem 0 0.35rem; color: var(--text-heading);">Employment Support</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+          Navigate NATS statutory apprenticeships, AICTE internships, resume transformation, and verified company postings.
+        </p>
+        <div class="apt-card-footer">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-subtle);">⏱️ 30–40 mins · Free</span>
+          <a href="{{ url_for('appointments_view', category='Employment & Internship Support') }}" class="btn btn-sm btn-outline">Get Support &rarr;</a>
+        </div>
+      </div>
+
+      <!-- 4. Parent-Student Discussion -->
+      <div class="card glass-card apt-preview-card">
+        <div class="apt-card-header">
+          <div class="apt-icon-wrap" style="background: rgba(217,119,6,0.1); color: #D97706;">🤝</div>
+          <span class="badge badge-gold">Family Dialogue</span>
+        </div>
+        <h3 style="font-size: 1.15rem; margin: 0.75rem 0 0.35rem; color: var(--text-heading);">Parent–Student Session</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+          A facilitated conversation using the CareerCompass Bridge tool to align student passion with family expectations without conflict.
+        </p>
+        <div class="apt-card-footer">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-subtle);">⏱️ 50 mins · Free</span>
+          <a href="{{ url_for('appointments_view', category='Parent–Student Discussion') }}" class="btn btn-sm btn-outline">Book Dialogue &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="{{ url_for('appointments_view') }}" class="btn btn-md btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+        <span>📅</span> View All Available Time Slots &rarr;
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       VISUAL CAREER GUIDANCE — 8 Core Concepts (Feature 7)
+  ════════════════════════════════════════════════ -->
+  <section class="visual-guidance-section" style="margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="section-header">
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2); padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.9rem;">🎨</span>
+        <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary-blue);">Visual Guidance Framework</span>
+      </div>
+      <h2>Visual Career Guidance for Students &amp; Parents</h2>
+      <p>Eight core milestones made accessible through intuitive visual explanations and progressive disclosure.</p>
+    </div>
+
+    <div class="vg-grid">
+      <!-- 1. Discovery -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="21" stroke="#2563EB" stroke-width="2.5" stroke-dasharray="4 2"/>
+            <circle cx="24" cy="24" r="16" fill="rgba(37,99,235,0.08)" stroke="#2563EB" stroke-width="2"/>
+            <polygon points="24,12 28,24 24,21 20,24" fill="#2563EB"/>
+            <polygon points="24,36 28,24 24,27 20,24" fill="#93C5FD"/>
+            <circle cx="24" cy="24" r="2.5" fill="#1E3A8A"/>
+          </svg>
+        </div>
+        <h4>1. Self-Discovery</h4>
+        <p class="vg-tagline">Evaluate cognitive strengths, passions, and working styles.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Traditional advice often begins with cut-off percentages. CareerCompass starts with what energizes you: analytical logic, practical building, visual arts, or community leadership.
+          </div>
+        </details>
+      </div>
+
+      <!-- 2. Pathway -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 38 L16 38 L16 28 L24 28 L24 18 L32 18 L32 10 L40 10" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8" cy="38" r="3.5" fill="#93C5FD"/>
+            <circle cx="16" cy="28" r="3.5" fill="#60A5FA"/>
+            <circle cx="24" cy="18" r="3.5" fill="#3B82F6"/>
+            <circle cx="32" cy="10" r="3.5" fill="#1D4ED8"/>
+            <path d="M40 7 L44 10 L40 13 Z" fill="#2563EB"/>
+          </svg>
+        </div>
+        <h4>2. Structured Pathway</h4>
+        <p class="vg-tagline">Step-by-step: School &rarr; College &rarr; Skills &rarr; Career.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Deconstruct complex multi-year trajectories into digestible milestones with verified entry prerequisites and alternative lateral entry diplomas.
+          </div>
+        </details>
+      </div>
+
+      <!-- 3. Skills -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="10" stroke="#2563EB" stroke-width="2.5"/>
+            <path d="M20 7 L20 10 M20 30 L20 33 M7 20 L10 20 M30 20 L33 20" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="32" cy="32" r="7" stroke="#7C3AED" stroke-width="2"/>
+            <path d="M32 23 L32 25 M32 39 L32 41 M23 32 L25 32 M39 32 L41 32" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>3. Skills &amp; Projects</h4>
+        <p class="vg-tagline">Combine hard technical craft with transferable abilities.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Every career pathway lists micro-projects you can build this weekend (like AutoCAD floor plans or open-source Python scripts) to test real curiosity before spending money.
+          </div>
+        </details>
+      </div>
+
+      <!-- 4. Budget -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="14" width="28" height="20" rx="4" stroke="#2563EB" stroke-width="2.5" fill="rgba(37,99,235,0.06)"/>
+            <circle cx="24" cy="24" r="5" stroke="#2563EB" stroke-width="2"/>
+            <path d="M6 20 L10 20 M38 20 L42 20 M6 28 L10 28 M38 28 L42 28" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>4. Transparent Budget</h4>
+        <p class="vg-tagline">Compare private tuition with low-cost public routes.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Financial realities are addressed honestly: state university degree fees, statutory scholarship portals, open courseware, and paid apprenticeship stipends that offset learning costs.
+          </div>
+        </details>
+      </div>
+
+      <!-- 5. Reality Check -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="24" y1="8" x2="24" y2="40" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 16 L38 16" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 16 L6 26 L14 26 Z" fill="rgba(37,99,235,0.15)" stroke="#2563EB" stroke-width="1.5"/>
+            <path d="M38 16 L34 24 L42 24 Z" fill="rgba(37,99,235,0.15)" stroke="#2563EB" stroke-width="1.5"/>
+            <circle cx="24" cy="16" r="3" fill="#1E3A8A"/>
+            <line x1="16" y1="40" x2="32" y2="40" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>5. Reality Simulator</h4>
+        <p class="vg-tagline">Weigh dreams against daily hours, licensing, and trade-offs.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            See the honest unglamorous side: long standing hours in hospital pharmacies, intense exam pass rates, outdoor site conditions, and statutory licensure requirements.
+          </div>
+        </details>
+      </div>
+
+      <!-- 6. Job Prep -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="16" width="32" height="24" rx="4" stroke="#2563EB" stroke-width="2.5" fill="rgba(37,99,235,0.06)"/>
+            <path d="M18 16 V12 C18 10.3 19.3 9 21 9 H27 C28.7 9 30 10.3 30 12 V16" stroke="#2563EB" stroke-width="2.2"/>
+            <line x1="16" y1="26" x2="32" y2="26" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16" y1="32" x2="26" y2="32" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>6. Verified Opportunities</h4>
+        <p class="vg-tagline">Access vetted internships, NATS schemes, and part-time work.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Filtered by city, category, and study-friendly schedules. Connected directly to official Ministry and university training frameworks without predatory commercial spam.
+          </div>
+        </details>
+      </div>
+
+      <!-- 7. Appointments -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="12" width="32" height="28" rx="4" stroke="#2563EB" stroke-width="2.5" fill="rgba(37,99,235,0.06)"/>
+            <line x1="8" y1="20" x2="40" y2="20" stroke="#2563EB" stroke-width="2"/>
+            <line x1="16" y1="8" x2="16" y2="14" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="32" y1="8" x2="32" y2="14" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="18" cy="28" r="2" fill="#2563EB"/>
+            <circle cx="24" cy="28" r="2" fill="#2563EB"/>
+            <circle cx="30" cy="28" r="2" fill="#2563EB"/>
+            <circle cx="18" cy="34" r="2" fill="#2563EB"/>
+            <circle cx="24" cy="34" r="2" fill="#2563EB"/>
+          </svg>
+        </div>
+        <h4>7. Real-Time Sessions</h4>
+        <p class="vg-tagline">1-on-1 consultations and technical mock interview drills.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Dynamic live slot booking with atomic double-booking prevention, calendar links, and verified guidance counselor attribution.
+          </div>
+        </details>
+      </div>
+
+      <!-- 8. Roadmap -->
+      <div class="card glass-card vg-card">
+        <div class="vg-icon-box">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 40 Q24 36 20 26 T36 12" stroke="#2563EB" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="3 3"/>
+            <circle cx="10" cy="40" r="4" fill="#2563EB"/>
+            <circle cx="20" cy="26" r="4" fill="#60A5FA"/>
+            <polygon points="36,8 44,12 36,16" fill="#2563EB"/>
+            <line x1="36" y1="8" x2="36" y2="22" stroke="#1E3A8A" stroke-width="2"/>
+          </svg>
+        </div>
+        <h4>8. Snake Roadmap</h4>
+        <p class="vg-tagline">Spacious zigzag visual journey with milestone checkboxes.</p>
+        <details class="vg-details">
+          <summary class="vg-summary">Learn more &darr;</summary>
+          <div class="vg-expanded-content">
+            Follow customized 7 to 11 step journey maps grouped into Stage A through G, linking directly to relevant practical project ideas and verified entry-level internships.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

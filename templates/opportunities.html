@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Job & Internship Opportunities — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════
+       HEADER & CAREER INSPIRATION BANNER
+  ════════════════════════════════════════════════ -->
+  <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Verified Pathways & Portals</span>
+        <h2>Discover Student-Friendly Opportunities</h2>
+        <p style="margin-bottom: 0; color: var(--text-muted);">
+          Explore authentic internships, statutory apprenticeships, part-time roles, and entry-level positions across India and remote platforms.
+        </p>
+      </div>
+
+      <!-- Quick Action Stats -->
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <span class="badge badge-navy" id="opp-count-badge">Loading opportunities...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Career Inspiration Glass Card -->
+  <div id="inspiration-card" class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--primary-blue); padding: 1.25rem 1.75rem;">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;">
+      <div style="flex: 1;">
+        <span style="font-size: 0.76rem; text-transform: uppercase; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.05em; display: block; margin-bottom: 0.35rem;">
+          💡 Career Inspiration · CareerCompass Guidance
+        </span>
+        <blockquote id="quote-text" style="font-size: 1.15rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.5rem; line-height: 1.4;">
+          "Your first career choice is a starting point, not a life sentence."
+        </blockquote>
+        <p id="quote-tip" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+          Focus on building core skills this semester rather than worrying about a 20-year outcome.
+        </p>
+        <span id="quote-action" style="font-size: 0.84rem; font-weight: 700; color: var(--primary-blue-hover);">
+          👉 Try a small project this weekend to explore the day-to-day work.
+        </span>
+      </div>
+      <div style="display: flex; gap: 0.4rem; flex-shrink: 0; align-items: center;">
+        <button type="button" id="btn-prev-quote" class="btn btn-sm btn-outline" aria-label="Previous quote" style="padding: 0.3rem 0.65rem;">&larr;</button>
+        <button type="button" id="btn-next-quote" class="btn btn-sm btn-outline" aria-label="Next quote" style="padding: 0.3rem 0.65rem;">&rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       LOCATION SELECTOR & SEARCH FILTER PANEL
+  ════════════════════════════════════════════════ -->
+  <section class="card glass-card" style="margin-bottom: 2.5rem; padding: 1.75rem;">
+    <h3 style="font-size: 1.2rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+      <span>📍</span> Location-Aware Search &amp; Filters
+    </h3>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; align-items: end;">
+      
+      <!-- City / Region Selector -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="city-select" class="form-label" style="font-size: 0.88rem;">City or Region</label>
+        <select id="city-select" class="form-control">
+          {% for city in cities %}
+          <option value="{{ city }}">{{ city }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Voluntary Custom Location / PIN -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="custom-location-input" class="form-label" style="font-size: 0.88rem;">Custom City / PIN (Voluntary)</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="custom-location-input" class="form-control" placeholder="e.g. Pune, Jaipur, 560001">
+          <button type="button" id="btn-geolocation" class="btn btn-outline btn-sm" title="Use Browser Location (Voluntary with Permission)" style="white-space: nowrap;">
+            📍 Auto-Detect
+          </button>
+        </div>
+      </div>
+
+      <!-- Work Mode (On-site / Hybrid / Remote) -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="work-mode-select" class="form-label" style="font-size: 0.88rem;">Work Mode</label>
+        <select id="work-mode-select" class="form-control">
+          <option value="all">All Modes</option>
+          <option value="remote">Remote Only (Work from Anywhere)</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="on_site">On-Site</option>
+        </select>
+      </div>
+
+      <!-- Keyword Search -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="search-input" class="form-label" style="font-size: 0.88rem;">Keyword / Role / Skill</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="search-input" class="form-control" placeholder="e.g. CAD, Python, Civil, Sports, Audit">
+          <button type="button" id="btn-search" class="btn btn-primary" style="padding: 0.72rem 1.25rem;">
+            🔍 Search
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Location Label indicator -->
+    <div id="location-status-bar" style="margin-top: 1rem; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.75rem; border-top: 1px solid rgba(37,99,235,0.12);">
+      <span id="location-label-text">
+        ℹ️ Showing opportunities based on: <strong>All Cities &amp; Remote</strong> (Location not independently tracked)
+      </span>
+      <span style="color: var(--text-subtle);">
+        🔒 Privacy safe: Exact GPS is never permanently stored
+      </span>
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(37,99,235,0.14);">
+      <span style="font-size: 0.82rem; font-weight: 700; color: var(--deep-navy); display: block; margin-bottom: 0.65rem;">
+        Opportunity Category:
+      </span>
+      <div class="chip-grid" id="category-chips">
+        <button type="button" class="chip-label active" data-category="All">All Opportunities</button>
+        <button type="button" class="chip-label" data-category="Civil Engineering & Construction">Civil &amp; Construction</button>
+        <button type="button" class="chip-label" data-category="IT & Software">IT &amp; Software</button>
+        <button type="button" class="chip-label" data-category="Business & Finance">Business &amp; Finance</button>
+        <button type="button" class="chip-label" data-category="Sports & Fitness">Sports &amp; Athletics</button>
+        <button type="button" class="chip-label" data-category="Part-Time & Campus">Part-Time &amp; Campus</button>
+      </div>
+    </div>
+
+    <!-- Opportunity Type Filter Chips -->
+    <div style="margin-top: 1rem;">
+      <span style="font-size: 0.82rem; font-weight: 700; color: var(--deep-navy); display: block; margin-bottom: 0.65rem;">
+        Type:
+      </span>
+      <div class="chip-grid" id="type-chips">
+        <button type="button" class="chip-label active" data-type="All">All Types</button>
+        <button type="button" class="chip-label" data-type="Internship">Internships</button>
+        <button type="button" class="chip-label" data-type="Apprenticeship">Apprenticeships (NATS/NAPS)</button>
+        <button type="button" class="chip-label" data-type="Part-Time">Part-Time / Study-Friendly</button>
+        <button type="button" class="chip-label" data-type="Campus Opportunity">Campus Opportunities</button>
+        <button type="button" class="chip-label" data-type="Freelance Project">Freelance / Open Source</button>
+        <button type="button" class="chip-label" data-type="Entry-Level">Entry-Level Trainee</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TRANSPARENCY & DATA INTEGRITY NOTICE
+  ════════════════════════════════════════════════ -->
+  <div class="disclaimer-banner" style="margin-bottom: 2rem;">
+    <span class="icon">⚖️</span>
+    <div>
+      <strong>Authentic Portal Framework Guarantee:</strong>
+      CareerCompass lists opportunities connected to official statutory portals (NATS, AICTE, National Career Service NCS, SAI, ICAI). We <strong>never invent fake live vacancies</strong>. Listings reflect active portal schemes; please click through to the official source to verify current deadlines and application windows.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       OPPORTUNITY CARDS GRID
+  ════════════════════════════════════════════════ -->
+  <div id="loading-opportunities" style="text-align: center; padding: 3rem 0;">
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">⏳</div>
+    <h3>Loading Verified Opportunities...</h3>
+    <p style="color: var(--text-muted);">Fetching matching internships, apprenticeships, and entry-level pathways.</p>
+  </div>
+
+  <div id="opportunities-grid" class="features-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); display: none; margin-bottom: 4rem;">
+    <!-- Rendered dynamically by static/js/opportunities.js -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-opportunities" class="card glass-card" style="display: none; text-align: center; padding: 4rem 2rem; margin-bottom: 4rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+    <h3>No Opportunities Match Your Current Filters</h3>
+    <p style="max-width: 500px; margin: 0 auto 1.5rem; color: var(--text-muted);">
+      Try switching to "All Cities" or "Remote Only", or clear your keyword search to see all opportunities.
+    </p>
+    <button type="button" id="btn-reset-filters" class="btn btn-primary">Reset Filters to Show All</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PREPARE TO APPLY — COMPREHENSIVE GUIDANCE
+  ════════════════════════════════════════════════ -->
+  <section class="section" style="padding-top: 1rem; border-top: 1px solid rgba(37,99,235,0.16); margin-top: 3rem;">
+    <div class="section-header text-left" style="margin-bottom: 2rem;">
+      <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Student Success Toolkit</span>
+      <h2>Prepare to Apply with Confidence</h2>
+      <p style="margin-bottom: 0; color: var(--text-muted);">
+        Practical guidance, professional communication templates, and safety checklists before submitting applications.
+      </p>
+    </div>
+
+    <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+      
+      <!-- 1. CV & Resume Guidance -->
+      <div class="card glass-card">
+        <div class="feature-icon" style="background: rgba(219,234,254,0.7); color: var(--primary-blue);">📄</div>
+        <h3 style="font-size: 1.25rem;">CV &amp; Resume Guidance</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+          For student applications, <strong>proof of curiosity outweighs years of experience</strong>.
+        </p>
+        <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.7; margin-bottom: 1rem;">
+          <li>Highlight tangible projects (AutoCAD drawings, GitHub repositories, school event budgets).</li>
+          <li>Keep it to exactly 1 page in a clean, single-column PDF format.</li>
+          <li>Include relevant coursework, software tools, and verifiable certifications (NPTEL, Google, Coursera).</li>
+          <li>Proofread carefully; zero spelling errors creates an immediate positive impression.</li>
+        </ul>
+      </div>
+
+      <!-- 2. Interview Preparation -->
+      <div class="card glass-card">
+        <div class="feature-icon" style="background: rgba(219,234,254,0.7); color: var(--primary-blue);">🎯</div>
+        <h3 style="font-size: 1.25rem;">Interview Preparation</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+          Structure your answers using the <strong>STAR Method</strong> (Situation, Task, Action, Result).
+        </p>
+        <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.7; margin-bottom: 1rem;">
+          <li>Prepare a 60-second summary answering "Tell me about yourself and your career interest."</li>
+          <li>Be ready to explain every project listed on your resume in depth.</li>
+          <li>Admit honestly when you don't know a technical concept, but explain how you would research it.</li>
+          <li>Prepare 2 thoughtful questions for the interviewer about day-to-day team challenges.</li>
+        </ul>
+      </div>
+
+      <!-- 3. Portfolio Suggestions -->
+      <div class="card glass-card">
+        <div class="feature-icon" style="background: rgba(219,234,254,0.7); color: var(--primary-blue);">📁</div>
+        <h3 style="font-size: 1.25rem;">Portfolio Suggestions</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+          Tailor your demonstration artifact according to your target field:
+        </p>
+        <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.7; margin-bottom: 1rem;">
+          <li><strong>Civil Engineering:</strong> PDF portfolio with 2 floor plans, structural calculations, and site visit photos.</li>
+          <li><strong>Software &amp; IT:</strong> Active GitHub with 2 deployed web apps and clean README documentation.</li>
+          <li><strong>Business &amp; Finance:</strong> Spreadsheet models, process audit reports, or market research decks.</li>
+          <li><strong>Sports &amp; Athletics:</strong> Tournament bracket schedules, video tagging clips, or first-aid training certificates.</li>
+        </ul>
+      </div>
+
+      <!-- 4. Professional Communication Tips -->
+      <div class="card glass-card">
+        <div class="feature-icon" style="background: rgba(219,234,254,0.7); color: var(--primary-blue);">✉️</div>
+        <h3 style="font-size: 1.25rem;">Professional Communication</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+          Write respectful, structured inquiry messages that respect mentors' time.
+        </p>
+        <div style="background: rgba(255,255,255,0.6); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-main); font-family: monospace; margin-bottom: 0.75rem;">
+          Subject: Student Application: [Role] – [Your Name] (B.Tech / Class)<br>
+          Dear [Name/Hiring Team],<br>
+          I am a student at [College] interested in [Domain]. I completed [Project] and would love to contribute to [Team]...
+        </div>
+        <span style="font-size: 0.82rem; color: var(--text-subtle);">Always follow up politely after 7–10 business days if no reply is received.</span>
+      </div>
+
+      <!-- 5. Scam-Awareness & Safety Checklist -->
+      <div class="card glass-card" style="border-top: 4px solid #DC2626;">
+        <div class="feature-icon" style="background: rgba(254,226,226,0.7); color: #DC2626;">🛡️</div>
+        <h3 style="font-size: 1.25rem; color: #DC2626;">Scam-Awareness Checklist</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+          Protect yourself from fraudulent employment and fake internship offers:
+        </p>
+        <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.7; margin-bottom: 0.5rem;">
+          <li><strong style="color: #DC2626;">NEVER pay money</strong> for application fees, security deposits, training kits, or job guarantees. Legitimate employers pay you.</li>
+          <li>Verify official domains (e.g. <code>.gov.in</code> for government portals, corporate email instead of generic Gmail/WhatsApp).</li>
+          <li>Be cautious of unsolicited job offers on Telegram or WhatsApp promising unrealistic high pay for clicking links.</li>
+          <li>Verify the organization on the official MCA (Ministry of Corporate Affairs) portal or university training cell.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/opportunities.js') }}"></script>
+{% endblock %}

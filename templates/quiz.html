@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block title %}Career Discovery Assessment — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="quiz-container">
+    <div class="section-header" style="margin-bottom: 1.5rem; text-align: left;">
+      <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Interactive Self-Discovery</span>
+      <h2>Career Discovery Assessment</h2>
+      <p>Answer honestly based on what you enjoy and how you naturally work. There are no right or wrong answers.</p>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-header card" style="padding: 1.25rem; margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="step-indicator" style="font-weight: 700; color: var(--text-heading);">Step 1 of 4: Educational Background</span>
+        <span id="step-percentage" style="font-weight: 700; color: var(--primary-blue);">25% Completed</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <form id="quiz-form" class="card" novalidate>
+      <!-- STEP 1: Education Level & Stream -->
+      <div class="quiz-step active" id="step-1">
+        <h3 style="margin-bottom: 1.25rem;">1. Education & Background</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="education_level">Current Education Level *</label>
+          <p class="form-hint">Where are you currently studying or what was your highest completed stage?</p>
+          <select class="form-control" id="education_level" name="education_level" required>
+            <option value="">-- Select Your Level --</option>
+            <option value="Class 10">Class 10 (Secondary School)</option>
+            <option value="Class 11–12">Class 11–12 (Higher Secondary)</option>
+            <option value="Diploma">Diploma / Polytechnic</option>
+            <option value="Undergraduate" selected>Undergraduate (Bachelor's Degree)</option>
+            <option value="Graduate or above">Graduate or above (Master's / Ph.D)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="current_stream">Current Stream or Academic Focus</label>
+          <p class="form-hint">Select the stream closest to your current studies.</p>
+          <select class="form-control" id="current_stream" name="current_stream">
+            <option value="General / Not Decided">General / Not Decided</option>
+            <option value="Science - PCM (Physics, Chemistry, Maths)">Science - PCM (Physics, Chemistry, Maths)</option>
+            <option value="Science - PCB (Physics, Chemistry, Biology)">Science - PCB (Physics, Chemistry, Biology)</option>
+            <option value="Commerce">Commerce / Accountancy</option>
+            <option value="Arts / Humanities">Arts / Humanities</option>
+            <option value="Computer Science / IT">Computer Science / IT</option>
+            <option value="Engineering & Technology">Engineering & Technology</option>
+            <option value="Vocational / Applied Arts">Vocational / Applied Arts</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Favourite Subjects (Select all that apply) *</label>
+          <p class="form-hint">Which subjects do you genuinely enjoy learning about?</p>
+          <div class="chip-grid">
+            {% for sub in [
+              "Computer Science", "Mathematics", "Physics", "Chemistry", "Biology",
+              "Economics", "Accountancy", "Art & Design", "Music & Audio",
+              "Psychology", "English", "Social Studies", "Physical Education & Sports", "Engineering Drawing & CAD"
+            ] %}
+            <label>
+              <input type="checkbox" name="favorite_subjects" value="{{ sub }}" class="chip-input">
+              <span class="chip-label">{{ sub }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="error-msg" id="fav-sub-error" style="color: #dc2626; font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+            Please select at least one favorite subject.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Interests & Strengths -->
+      <div class="quiz-step" id="step-2">
+        <h3 style="margin-bottom: 1.25rem;">2. Interests & Strengths</h3>
+
+        <div class="form-group">
+          <label class="form-label">Key Areas of Interest (Select at least 1) *</label>
+          <p class="form-hint">What domains spark your curiosity?</p>
+          <div class="chip-grid">
+            {% for interest, icon in [
+              ("technology", "💻 Technology & Computing"),
+              ("robotics", "🤖 Robotics & Automation"),
+              ("science", "🔬 Natural Sciences & Research"),
+              ("space", "🚀 Space Exploration & Astronomy"),
+              ("creativity", "🎨 Creative Arts & Design"),
+              ("video editing", "🎬 Video Editing & Digital Media"),
+              ("music", "🎵 Music & Sound Design"),
+              ("choreography", "💃 Choreography & Performing Arts"),
+              ("business", "📈 Business & Finance"),
+              ("healthcare", "🩺 Healthcare & Pharmacy"),
+              ("sports", "🏅 Sports & Athletics"),
+              ("education", "📚 Teaching & Mentorship"),
+              ("public service", "🏛️ Public Policy & Civil Services"),
+              ("cybersecurity", "🛡️ Cybersecurity & Digital Defense"),
+              ("hands-on work", "⚙️ Machinery & Practical Engineering")
+            ] %}
+            <label>
+              <input type="checkbox" name="interests" value="{{ interest }}" class="chip-input">
+              <span class="chip-label">{{ icon }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="error-msg" id="interest-error" style="color: #dc2626; font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+            Please select at least one area of interest.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Natural Strengths (Select at least 1) *</label>
+          <p class="form-hint">What do peers and teachers often say you do well?</p>
+          <div class="chip-grid">
+            {% for str_val, label in [
+              ("analytical thinking", "🧠 Analytical & Logical Thinking"),
+              ("creativity", "💡 Creative Ideation & Originality"),
+              ("communication", "🗣️ Clear Communication & Storytelling"),
+              ("empathy", "❤️ Empathy & Active Listening"),
+              ("leadership", "🎯 Leadership & Organizing Teams"),
+              ("practical problem-solving", "🛠️ Practical Problem-Solving"),
+              ("spatial reasoning", "📐 Spatial & 3D Visualization"),
+              ("musical rhythm", "🎼 Musical Rhythm & Tone"),
+              ("physical agility", "🏃 Physical Agility & Stamina")
+            ] %}
+            <label>
+              <input type="checkbox" name="strengths" value="{{ str_val }}" class="chip-input">
+              <span class="chip-label">{{ label }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <div class="error-msg" id="strength-error" style="color: #dc2626; font-size: 0.85rem; margin-top: 0.5rem; display: none;">
+            Please select at least one strength.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Work Style & Career Goals -->
+      <div class="quiz-step" id="step-3">
+        <h3 style="margin-bottom: 1.25rem;">3. Work Style & Life Goals</h3>
+
+        <div class="form-group">
+          <label class="form-label">Preferred Work Style *</label>
+          <p class="form-hint">In what working environment do you perform your best?</p>
+          <div class="radio-card-grid">
+            {% for val, title, desc in [
+              ("hands-on work", "🛠️ Hands-On Work", "Working directly with tools, physical objects, or code prototypes."),
+              ("people-oriented work", "🤝 People-Oriented Work", "Helping, coaching, guiding, or caring for individuals and groups."),
+              ("teamwork", "👥 Collaborative Teamwork", "Building solutions together in dynamic group environments."),
+              ("research", "🔍 Deep Research", "Investigating literature, formulating hypotheses, and analyzing data."),
+              ("individual work", "🎯 Focused Individual Work", "Deep autonomous concentration with independent autonomy.")
+            ] %}
+            <label>
+              <input type="radio" name="preferred_work_style" value="{{ val }}" class="chip-input" {% if loop.first %}checked{% endif %}>
+              <div class="radio-card">
+                <strong>{{ title }}</strong>
+                <p style="font-size: 0.85rem; margin: 0.35rem 0 0; color: var(--text-muted);">{{ desc }}</p>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Primary Career Goal *</label>
+          <p class="form-hint">What outcome matters most to you in the next 5–10 years?</p>
+          <div class="radio-card-grid">
+            {% for val, title, desc in [
+              ("learning", "🧠 Mastery & Continuous Learning", "Rapid skill acquisition, cutting-edge challenges, and growth."),
+              ("social impact", "🌍 Positive Social Impact", "Leaving the community, patients, or environment noticeably better."),
+              ("stability", "🛡️ High Job Stability", "Predictable career progression, financial security, and peace of mind."),
+              ("independence", "🕊️ Independence & Autonomy", "Freelancing, remote mobility, and setting your own schedule."),
+              ("entrepreneurship", "🚀 Entrepreneurship & Innovation", "Creating ventures, building organizations, and taking calculated risks.")
+            ] %}
+            <label>
+              <input type="radio" name="career_goals" value="{{ val }}" class="chip-input" {% if loop.first %}checked{% endif %}>
+              <div class="radio-card">
+                <strong>{{ title }}</strong>
+                <p style="font-size: 0.85rem; margin: 0.35rem 0 0; color: var(--text-muted);">{{ desc }}</p>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Budget, Location, Skills & Constraints -->
+      <div class="quiz-step" id="step-4">
+        <h3 style="margin-bottom: 1.25rem;">4. Budget, Mobility & Skills</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="budget_range">Budget Range for Higher Education *</label>
+          <p class="form-hint">We do not disqualify careers based on budget; this helps us highlight low-cost routes.</p>
+          <select class="form-control" id="budget_range" name="budget_range" required>
+            <option value="low_free" selected>Low / Free Resources Preferred (Govt colleges, scholarships, self-learning)</option>
+            <option value="moderate">Moderate (Standard public university / affordable private college)</option>
+            <option value="flexible">Flexible / Willing to invest in professional private institutes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location_preference">Study Location & Mobility</label>
+          <select class="form-control" id="location_preference" name="location_preference">
+            <option value="flexible_relocate" selected>Flexible / Willing to relocate anywhere</option>
+            <option value="regional">Regional / Prefer within state or neighboring city</option>
+            <option value="local">Local Only / Prefer to stay in home town</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Skills You Already Have (Select any)</label>
+          <p class="form-hint">This helps us calculate which skills you already possess vs what you need to learn.</p>
+          <div class="chip-grid">
+            {% for skill in ["Basic Coding", "Python", "Spreadsheets / Excel", "Public Speaking", "Writing & Content", "Design / Drawing", "Math & Logic", "Problem Solving", "Video Editing", "Lab Basics"] %}
+            <label>
+              <input type="checkbox" name="existing_skills" value="{{ skill }}" class="chip-input">
+              <span class="chip-label">{{ skill }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="constraints">Optional Practical Circumstances</label>
+          <p class="form-hint">Any specific circumstances (e.g. need part-time work, prefer remote study, family commitments)?</p>
+          <input type="text" class="form-control" id="constraints" name="constraints" placeholder="e.g. Need to support family part-time while studying" maxlength="300">
+        </div>
+      </div>
+
+      <!-- Quiz Navigation Buttons -->
+      <div class="quiz-footer">
+        <button type="button" class="btn btn-primary" id="btn-next">
+          Next Step &rarr;
+        </button>
+
+        <button type="submit" class="btn btn-primary" id="btn-submit" style="display: none;">
+          Generate My Recommendations 🚀
+        </button>
+
+        <button type="button" class="btn btn-outline" id="btn-prev" style="display: none;">
+          &larr; Previous Step
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

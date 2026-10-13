@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Career Pathways — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+    <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Verified Pathways Catalog</span>
+    <h2>Explore Career Pathways</h2>
+    <p>
+      Discover structured information on 14+ careers across technology, engineering, healthcare, design, and business.
+    </p>
+
+    <!-- Category Filter Bar -->
+    <div class="chip-grid" style="margin-top: 1.5rem;">
+      <a href="{{ url_for('careers_catalog') }}" class="chip-label {% if not selected_category %}active{% endif %}">
+        All Categories ({{ careers|length }})
+      </a>
+      {% for cat in ["Technology & Engineering", "Business & Finance", "Sports & Fitness", "Data & Analytics", "Creative & Design", "Healthcare & Life Sciences", "Education & Social", "Sciences & Environment"] %}
+      <a href="{{ url_for('careers_catalog', category=cat) }}" class="chip-label {% if selected_category == cat %}active{% endif %}">
+        {{ cat }}
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- Quick Navigation Hub Banners -->
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem;">
+      <a href="{{ url_for('sports_careers_view') }}" class="btn btn-sm btn-outline" style="border-color: var(--primary-blue);">
+        🏆 Dedicated Sports Careers Explorer &rarr;
+      </a>
+      <a href="{{ url_for('business_careers_view') }}" class="btn btn-sm btn-outline" style="border-color: var(--primary-blue);">
+        💼 Business &amp; Commerce Interactive Hub &rarr;
+      </a>
+    </div>
+  </div>
+
+  <div class="features-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));">
+    {% for career in careers %}
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">{{ career.category }}</span>
+          <span class="badge badge-mint">{{ career.cost_category }}</span>
+          {% if career.regulated %}
+          <span class="badge badge-regulated">Licensure Required</span>
+          {% endif %}
+        </div>
+        <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">{{ career.title }}</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+          {{ career.short_description }}
+        </p>
+      </div>
+
+      <div>
+        <div style="font-size: 0.85rem; color: var(--text-subtle); margin-bottom: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+          <div><strong>Min Education:</strong> {{ career.min_education_level }}</div>
+          <div><strong>Tuition Estimate:</strong> {{ career.cost_estimate_detail }}</div>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <a href="{{ url_for('career_detail', career_id=career.id) }}" class="btn btn-navy btn-sm" style="flex: 1;">
+            Reality Check &rarr;
+          </a>
+          <a href="{{ url_for('roadmap_view', career_id=career.id) }}" class="btn btn-outline-mint btn-sm">
+            Roadmap
+          </a>
+          <a href="{{ url_for('compare_view', student_career_id=career.id) }}" class="btn btn-secondary btn-sm" title="Compare in Parent Bridge">
+            Compare
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

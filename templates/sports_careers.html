@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}Sports & Athletics Career Exploration Hub — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════
+       HERO HEADER & OVERVIEW
+  ════════════════════════════════════════════════ -->
+  <div class="section-header text-left" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Dedicated Exploration Hub</span>
+        <h2>Sports, Athletics &amp; Human Performance Careers</h2>
+        <p style="margin-bottom: 0; color: var(--text-muted); max-width: 800px;">
+          Passionate about sports? The sporting world extends far beyond playing on the field. Discover fulfilling professional routes across performance science, clinical rehabilitation, tactical analytics, event logistics, and youth coaching.
+        </p>
+      </div>
+      <a href="{{ url_for('careers_catalog') }}" class="btn btn-secondary btn-sm">
+        &larr; Back to All Careers
+      </a>
+    </div>
+  </div>
+
+  <!-- Statutory & Educational Reality Notice -->
+  <div class="disclaimer-banner" style="margin-bottom: 2.5rem;">
+    <span class="icon">⚖️</span>
+    <div>
+      <strong>Crucial Professional Qualification Notice:</strong>
+      A general interest in sports does <em>not</em> qualify an individual to practice regulated professions such as <strong>Sports Physiotherapy</strong> (which legally requires a 4.5-year clinical Bachelor of Physiotherapy degree and state council registration) or clinical psychology. Each career pathway below explicitly distinguishes mandatory statutory degrees from open skill-based certifications.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       INTERACTIVE FAMILY EXPLORER: "Which Sports Family Fits You?"
+  ════════════════════════════════════════════════ -->
+  <section class="card glass-card" style="margin-bottom: 3rem; padding: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.05em;">
+          Exploratory Orientation Tool
+        </span>
+        <h3 style="margin: 0.25rem 0 0.5rem; font-size: 1.4rem;">Which Sports Career Family Fits Your Natural Strengths?</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Select your primary inclination to filter corresponding pathways (Exploratory guidance, not a psychological test).
+        </p>
+      </div>
+    </div>
+
+    <!-- Family Filter Buttons -->
+    <div class="chip-grid" id="sports-family-chips" style="margin-bottom: 1.5rem;">
+      <button type="button" class="chip-label active" data-family="all">Show All 12+ Directions</button>
+      <button type="button" class="chip-label" data-family="science">🔬 Science &amp; Health (Physio, Nutrition, Biomechanics)</button>
+      <button type="button" class="chip-label" data-family="coaching">🎯 Coaching &amp; Development (Trainer, P.E., Grassroots)</button>
+      <button type="button" class="chip-label" data-family="management">🏟️ Management &amp; Events (Facility, Tournament, League)</button>
+      <button type="button" class="chip-label" data-family="analytics">📊 Analytics &amp; Media (Data Tagging, Journalism, Tactics)</button>
+      <button type="button" class="chip-label" data-family="competing">⚡ Competitive Playing (Athlete, Officiating)</button>
+    </div>
+
+    <!-- Family Info Banner (Dynamic) -->
+    <div id="family-info-banner" style="background: rgba(234, 243, 255, 0.7); border: 1px solid rgba(37,99,235,0.2); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.9rem; color: var(--text-main);">
+      Showing all sports career families. Each pathway details day-to-day responsibilities, statutory qualifications, and beginner projects.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SPORTS CAREER PATHWAYS GRID
+  ════════════════════════════════════════════════ -->
+  <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+    <h3>Comprehensive Sports Pathways Catalog</h3>
+    <p style="color: var(--text-muted);">Explore structured profiles with verified education requirements, challenges, and roadmaps.</p>
+  </div>
+
+  <div class="features-grid" id="sports-cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom: 4rem;">
+
+    <!-- 1. Sports Physiotherapist -->
+    <div class="card glass-card sports-item" data-family="science" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Science &amp; Health</span>
+          <span class="badge badge-regulated">Statutory BPT Required</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Sports Physiotherapist</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Specializes in on-field emergency care, musculoskeletal rehabilitation, biomechanical assessment, and return-to-play protocols for athletes.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Core Degree:</strong> Bachelor of Physiotherapy (BPT, 4.5 yrs) + MPT</div>
+          <div><strong>Mandatory Council:</strong> NCAHP / State Physiotherapy Council</div>
+          <div><strong>Key Skills:</strong> Taping, Manual Therapy, Biomechanics, CPR</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/sports-physiotherapist" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=sports-physiotherapist" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Sports Analyst -->
+    <div class="card glass-card sports-item" data-family="analytics" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Analytics &amp; Tactics</span>
+          <span class="badge badge-mint">Open / Portfolio Driven</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Sports Analyst &amp; Performance Specialist</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Tags match footage, processes GPS tracking and heart-rate telemetry, and builds tactical scouting reports for coaching teams.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Sports Science, Data Analytics, Statistics, or CS</div>
+          <div><strong>Tools:</strong> Python, Tableau, Kinovea, Video Tagging (Hudl)</div>
+          <div><strong>Beginner Project:</strong> Opposition video breakdown using open data</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/sports-analyst" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=sports-analyst" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Athletic Coach -->
+    <div class="card glass-card sports-item" data-family="coaching" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Coaching &amp; Mentoring</span>
+          <span class="badge badge-mint">Federation Licenses</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Athletic Coach &amp; Sports Trainer</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Guides youth and elite athletes in skill drills, tactical awareness, team strategy, and mental resilience across sports academies and schools.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> B.P.Ed / NSNIS Diploma in Coaching + Federation Licenses</div>
+          <div><strong>Institutes:</strong> NIS Patiala, LNIPE Gwalior, State Sports Councils</div>
+          <div><strong>Key Skills:</strong> Drill Design, Motivation, Game Psychology</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/sports-coach" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=sports-coach" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Sports Event & Facility Manager -->
+    <div class="card glass-card sports-item" data-family="management" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Operations &amp; Business</span>
+          <span class="badge badge-mint">Event Management</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Sports Event &amp; Facility Manager</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Coordinates tournament brackets, referee logistics, stadium booking, turf maintenance, sponsor activations, and athlete hospitality.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Sports Management, BBA, Event Logistics, Physical Ed</div>
+          <div><strong>Hubs:</strong> Franchise Leagues (IPL/ISL), Stadiums, Marathon Circuits</div>
+          <div><strong>Key Skills:</strong> Bracket Scheduling, Budgeting, Vendor Contracts</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/sports-event-manager" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=sports-event-manager" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Sports Science Specialist -->
+    <div class="card glass-card sports-item" data-family="science" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Human Physiology</span>
+          <span class="badge badge-primary">B.Sc / M.Sc Track</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Sports Science Specialist &amp; Physiologist</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Operates high-performance laboratory equipment (force plates, metabolic analyzers) to track VO2 max, fatigue markers, and power output.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> B.Sc / M.Sc in Sports Science, Exercise Physiology</div>
+          <div><strong>Institutes:</strong> National Sports University (NSU), SAI High Performance Labs</div>
+          <div><strong>Key Skills:</strong> Biomechanics, VO2 Max Testing, Periodization</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/sports-science-specialist" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=sports-science-specialist" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Physical Education Teacher -->
+    <div class="card glass-card sports-item" data-family="coaching" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Education &amp; Schools</span>
+          <span class="badge badge-mint">NCTE Approved B.P.Ed</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Physical Education (P.E.) Teacher</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Teaches fitness, movement fundamentals, team sports, and healthy lifestyle habits to K-12 school students and college departments.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Bachelor of Physical Education (B.P.Ed) / M.P.Ed</div>
+          <div><strong>Eligibility:</strong> NCTE teacher qualification guidelines</div>
+          <div><strong>Key Skills:</strong> Pedagogy, Youth Engagement, Sportsmanship</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/teacher-educator" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/roadmap?career_slug=teacher-educator" class="btn btn-outline btn-sm">Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Sports Journalist & Media Broadcaster -->
+    <div class="card glass-card sports-item" data-family="analytics" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Media &amp; Storytelling</span>
+          <span class="badge badge-mint">Journalism Track</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Sports Journalist &amp; Broadcaster</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Covers live sporting events, conducts athlete interviews, writes analytical commentary, and hosts podcasts or broadcast reports.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Education:</strong> Journalism, Mass Comm, English, or active sports blogging</div>
+          <div><strong>Platforms:</strong> Sports websites, newspapers, podcasting, TV</div>
+          <div><strong>Key Skills:</strong> Live Match Reporting, Ethical Verification, Audio/Video</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/careers/graphic-designer" class="btn btn-navy btn-sm" style="flex: 1;">Reality Check &rarr;</a>
+          <a href="/opportunities?category=Sports+%26+Fitness" class="btn btn-outline btn-sm">Opportunities</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Competitive Athlete & Player -->
+    <div class="card glass-card sports-item" data-family="competing" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">Competitive Player</span>
+          <span class="badge badge-primary">Elite Performance</span>
+        </div>
+        <h4 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Professional Competitive Athlete</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+          Trains intensively to compete at state, national, and international championship levels in individual or team disciplines.
+        </p>
+        <div style="background: rgba(255,255,255,0.5); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.82rem; margin-bottom: 1rem;">
+          <div><strong>Reality Check:</strong> Highly competitive pyramid; requires concurrent dual-career education for long-term security</div>
+          <div><strong>Support:</strong> Khelo India Scholarships, SAI Sports Hostels</div>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="/compare" class="btn btn-navy btn-sm" style="flex: 1;">Bridge &amp; Backup Plan &rarr;</a>
+          <a href="/opportunities?category=Sports+%26+Fitness" class="btn btn-outline btn-sm">Portal Schemes</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       INTERACTIVE SPORTS EVENT PLANNING EXERCISE
+  ════════════════════════════════════════════════ -->
+  <section class="card glass-card" style="padding: 2.25rem; margin-bottom: 4rem;">
+    <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Interactive Experience</span>
+    <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Fictional Sports Tournament Budget &amp; Logistics Calculator</h3>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.75rem;">
+      Experience the real decision-making of a <strong>Sports Event Manager</strong>! Adjust tournament parameters to see projected expenses, safety requirements, and break-even participation fees. (Illustrative simulation using fictional planning figures).
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; align-items: start;">
+      
+      <!-- Controls -->
+      <div style="background: rgba(255, 255, 255, 0.6); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <div class="form-group">
+          <label for="num-teams-slider" class="form-label" style="font-size: 0.88rem; display: flex; justify-content: space-between;">
+            <span>Number of Participating Teams:</span>
+            <strong id="num-teams-val" style="color: var(--primary-blue);">16 Teams</strong>
+          </label>
+          <input type="range" id="num-teams-slider" min="4" max="32" step="4" value="16" class="simulator-slider">
+        </div>
+
+        <div class="form-group">
+          <label for="tournament-duration" class="form-label" style="font-size: 0.88rem;">Tournament Duration:</label>
+          <select id="tournament-duration" class="form-control">
+            <option value="1">1-Day Knockout Blitz (8 matches)</option>
+            <option value="2" selected>2-Day Weekend Championship (16 matches)</option>
+            <option value="4">4-Day Extended League &amp; Knockout (32 matches)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="medical-tier" class="form-label" style="font-size: 0.88rem;">Medical &amp; Safety Provision:</label>
+          <select id="medical-tier" class="form-control">
+            <option value="standard">Standard: First Aid Kit + Certified First Aider (₹4,000/day)</option>
+            <option value="pro" selected>Professional: Dedicated Sports Physio + On-Site Ambulance (₹12,000/day)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Projected Calculations Display -->
+      <div style="background: rgba(234, 243, 255, 0.7); padding: 1.5rem; border-radius: var(--radius-md); border: 1.5px solid rgba(37,99,235,0.25);">
+        <h4 style="font-size: 1.1rem; color: var(--deep-navy); margin-bottom: 1rem;">Projected Event Budget Summary</h4>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span>Ground Rental &amp; Lighting:</span>
+            <strong id="cost-ground">₹24,000</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Referees &amp; Technical Officials:</span>
+            <strong id="cost-referees">₹16,000</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Medical &amp; Player Safety:</span>
+            <strong id="cost-medical">₹24,000</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Trophies, Medals &amp; Refreshments:</span>
+            <strong id="cost-amenities">₹12,000</strong>
+          </div>
+          <div style="border-top: 1.5px solid rgba(37,99,235,0.25); padding-top: 0.75rem; margin-top: 0.25rem; display: flex; justify-content: space-between; font-size: 1.05rem;">
+            <span>Total Estimated Cost:</span>
+            <strong id="cost-total" style="color: var(--primary-blue);">₹76,000</strong>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; padding: 0.85rem; background: #FFFFFF; border-radius: var(--radius-sm); border: 1px solid rgba(37,99,235,0.2); font-size: 0.85rem;">
+          💡 <strong>Break-Even Entry Fee:</strong>
+          <div id="break-even-fee" style="font-size: 1.3rem; font-weight: 800; color: #065F46; margin: 0.25rem 0;">
+            ₹4,750 per team
+          </div>
+          <span style="font-size: 0.78rem; color: var(--text-subtle);">
+            Covers costs at zero profit. To generate surplus for prize money, seek local sponsors!
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Family Chips Filter
+    const chips = document.querySelectorAll('#sports-family-chips .chip-label');
+    const items = document.querySelectorAll('.sports-item');
+    const banner = document.getElementById('family-info-banner');
+
+    const descriptions = {
+      all: 'Showing all sports career families. Each pathway details day-to-day responsibilities, statutory qualifications, and beginner projects.',
+      science: 'Focuses on human anatomy, physiological testing, exercise mechanics, and clinical rehabilitation.',
+      coaching: 'Focuses on sports pedagogy, drill design, youth athlete development, and tactical instruction.',
+      management: 'Focuses on tournament execution, facility scheduling, brand sponsorships, and event budgets.',
+      analytics: 'Focuses on performance video analysis, wearable sensors, tactical scouting, and sports journalism.',
+      competing: 'Focuses on competitive performance while maintaining a dual-career education backup plan.'
+    };
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const fam = chip.dataset.family;
+        banner.textContent = descriptions[fam] || descriptions.all;
+
+        items.forEach(item => {
+          if (fam === 'all' || item.dataset.family === fam) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Sports Event Planning Calculator
+    const teamsSlider = document.getElementById('num-teams-slider');
+    const teamsVal = document.getElementById('num-teams-val');
+    const durationSelect = document.getElementById('tournament-duration');
+    const medicalSelect = document.getElementById('medical-tier');
+
+    const costGround = document.getElementById('cost-ground');
+    const costReferees = document.getElementById('cost-referees');
+    const costMedical = document.getElementById('cost-medical');
+    const costAmenities = document.getElementById('cost-amenities');
+    const costTotal = document.getElementById('cost-total');
+    const breakEvenFee = document.getElementById('break-even-fee');
+
+    function calculateBudget() {
+      const teams = parseInt(teamsSlider.value, 10);
+      const days = parseInt(durationSelect.value, 10);
+      const medicalType = medicalSelect.value;
+
+      teamsVal.textContent = `${teams} Teams`;
+
+      const matches = teams - 1; // single knockout count
+      const groundCost = days * 12000;
+      const refereeCost = matches * 1000;
+      const medCost = (medicalType === 'pro' ? 12000 : 4000) * days;
+      const amenityCost = (teams * 500) + 4000;
+      const total = groundCost + refereeCost + medCost + amenityCost;
+      const feePerTeam = Math.ceil(total / teams);
+
+      costGround.textContent = `₹${groundCost.toLocaleString('en-IN')}`;
+      costReferees.textContent = `₹${refereeCost.toLocaleString('en-IN')}`;
+      costMedical.textContent = `₹${medCost.toLocaleString('en-IN')}`;
+      costAmenities.textContent = `₹${amenityCost.toLocaleString('en-IN')}`;
+      costTotal.textContent = `₹${total.toLocaleString('en-IN')}`;
+      breakEvenFee.textContent = `₹${feePerTeam.toLocaleString('en-IN')} per team`;
+    }
+
+    teamsSlider.addEventListener('input', calculateBudget);
+    durationSelect.addEventListener('change', calculateBudget);
+    medicalSelect.addEventListener('change', calculateBudget);
+    calculateBudget();
+  });
+</script>
+{% endblock %}

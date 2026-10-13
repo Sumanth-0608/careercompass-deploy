@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}AI Career Guidance Chat — Google Gemini & ChatGPT (OpenAI) | CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container ai-chat-container">
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE HEADER
+  ════════════════════════════════════════════════ -->
+  <div class="page-header" style="text-align: center; margin-bottom: 2rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.22); padding: 0.35rem 0.95rem; border-radius: 999px; margin-bottom: 0.75rem;">
+      <span style="font-size: 1rem;">🤖</span>
+      <span style="font-size: 0.85rem; font-weight: 800; color: var(--primary-blue);">Frontier AI Career Intelligence</span>
+    </div>
+    <h1 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800; color: var(--text-heading); margin-bottom: 0.5rem;">
+      CareerCompass <span style="color: var(--primary-blue);">AI Chat</span>
+    </h1>
+    <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 760px; margin: 0 auto; line-height: 1.6;">
+      Get personalized career advice, college pathway comparisons, and customized roadmaps powered by official Google Gemini &amp; ChatGPT (OpenAI) APIs.
+    </p>
+  </div>
+
+  <!-- Mobile View Tab Switcher (Visible only on smaller viewports) -->
+  <div class="ai-mobile-tabs" id="ai-mobile-tabs">
+    <button type="button" class="btn btn-sm btn-primary ai-tab-btn active" id="tab-btn-chat" onclick="switchMobileAiTab('chat')">
+      💬 Chat View
+    </button>
+    <button type="button" class="btn btn-sm btn-outline ai-tab-btn" id="tab-btn-sidebar" onclick="switchMobileAiTab('sidebar')">
+      ⚙️ Models &amp; History
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN TWO-COLUMN CHAT INTERFACE
+  ════════════════════════════════════════════════ -->
+  <div class="ai-chat-layout">
+
+    <!-- ─────────────────────────────────────────────
+         LEFT SIDEBAR: PROVIDERS, MODELS, HISTORY
+    ───────────────────────────────────────────── -->
+    <aside class="ai-sidebar card glass-card" id="ai-sidebar">
+      
+      <!-- New Chat Action -->
+      <div style="margin-bottom: 1.25rem;">
+        <button type="button" class="btn btn-primary w-full" id="btn-new-chat" onclick="startNewChat()" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+          <span>✨</span>
+          <span>New Consultation</span>
+        </button>
+      </div>
+
+      <!-- 1. AI Provider Selection -->
+      <div class="sidebar-section">
+        <label class="sidebar-label">
+          <span>Select AI Provider</span>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">2 Official AI Providers</span>
+        </label>
+        
+        <div class="provider-cards-list" id="provider-cards-list">
+          {% for p in providers %}
+          <div class="provider-card {% if loop.first %}active{% endif %} {% if not p.is_configured %}not-configured{% endif %}"
+               data-provider-id="{{ p.id }}"
+               onclick="selectProvider('{{ p.id }}')">
+            <div class="provider-card-header">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="provider-icon">{{ p.icon }}</span>
+                <span class="provider-name">{{ p.name }}</span>
+              </div>
+              <span class="status-pill {% if p.is_configured %}status-configured{% else %}status-not_configured{% endif %}">
+                {% if p.is_configured %}● Configured{% else %}○ Not Configured{% endif %}
+              </span>
+            </div>
+            <div class="provider-desc">{{ p.description }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 2. Model Selection Dropdown -->
+      <div class="sidebar-section">
+        <label class="sidebar-label" for="model-select">Active Model</label>
+        <div class="glass-dropdown-wrapper">
+          <select id="model-select" class="form-control" onchange="handleModelChange(this.value)">
+            <!-- Populated via JavaScript dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <!-- 3. Profile Context Opt-In Switch -->
+      <div class="sidebar-section profile-optin-box">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading); display: flex; align-items: center; gap: 0.35rem;">
+              <span>🧭 Use My Profile</span>
+            </div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin: 0.25rem 0 0; line-height: 1.4;">
+              Include current education stage and interests for tailored guidance. Disabled by default.
+            </p>
+          </div>
+          <label class="toggle-switch" style="margin-top: 0.2rem;">
+            <input type="checkbox" id="profile-optin-checkbox" onchange="toggleProfileSharing(this.checked)">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div id="profile-status-note" style="font-size: 0.74rem; color: var(--primary-blue); margin-top: 0.4rem; display: none;">
+          ✓ Profile context will be safely passed to the selected AI.
+        </div>
+      </div>
+
+      <!-- 4. Conversation History -->
+      <div class="sidebar-section" style="flex: 1; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <label class="sidebar-label" style="margin-bottom: 0;">Recent Sessions</label>
+          <button type="button" class="btn-text-action" onclick="clearAllConversations()" title="Clear all saved sessions">
+            Clear All
+          </button>
+        </div>
+        <div class="conversation-list" id="conversation-list">
+          <div style="font-size: 0.82rem; color: var(--text-muted); text-align: center; padding: 1.25rem 0;">
+            No past sessions yet.
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy & Ethics Footer -->
+      <div class="sidebar-privacy-notice">
+        🔒 <strong>Private &amp; Explainable:</strong> API keys are kept strictly on the backend. Conversations are stored locally in your session.
+      </div>
+
+    </aside>
+
+    <!-- ─────────────────────────────────────────────
+         RIGHT MAIN CHAT PANEL
+    ───────────────────────────────────────────── -->
+    <main class="ai-chat-panel card glass-card" id="ai-chat-panel">
+      
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="active-provider-avatar" id="header-provider-icon">✨</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <h3 id="header-provider-title" style="margin: 0; font-size: 1.15rem; color: var(--text-heading);">
+                Google Gemini
+              </h3>
+              <span id="header-status-pill" class="status-pill status-available">
+                ● Connected
+              </span>
+            </div>
+            <div id="header-model-label" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.15rem;">
+              Model: gemini-1.5-flash
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button type="button" class="btn btn-sm btn-outline" onclick="clearCurrentChat()" title="Clear current conversation messages">
+            🧹 Clear Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Message Area -->
+      <div class="chat-messages-area" id="chat-messages-area">
+        
+        <!-- Welcome Message -->
+        <div class="ai-message-bubble welcome-card">
+          <div class="bubble-header">
+            <span class="bubble-avatar">🧭</span>
+            <strong style="color: var(--text-heading); font-size: 0.95rem;">CareerCompass AI Navigator</strong>
+          </div>
+          <div class="bubble-content" style="line-height: 1.6; font-size: 0.94rem; color: var(--text-main);">
+            <p style="margin-bottom: 0.75rem;">
+              Welcome to <strong>CareerCompass AI</strong>. Explore careers, understand your strengths, compare education pathways, and create practical next steps. You can switch AI providers whenever you want.
+            </p>
+            <p style="margin-bottom: 0;">
+              Select a suggested topic below or type your career question:
+            </p>
+          </div>
+
+          <!-- Suggested Prompt Chips -->
+          <div class="prompt-chips-wrapper" style="margin-top: 1rem;">
+            <div class="prompt-chips-grid">
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Which careers match my interests?')">
+                🎯 Which careers match my interests?
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Help me choose a college pathway.')">
+                🎓 Help me choose a college pathway
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Create a roadmap for civil engineering.')">
+                🏗️ Create a roadmap for civil engineering
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('How can I start learning cybersecurity?')">
+                🛡️ How can I start learning cybersecurity?
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Compare creative and technical careers.')">
+                ⚖️ Compare creative and technical careers
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Help me prepare for an interview.')">
+                💼 Help me prepare for an interview
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Suggest affordable learning resources.')">
+                📚 Suggest affordable learning resources
+              </button>
+              <button type="button" class="prompt-chip" onclick="applyPromptChip('Explain these career options to my parents.')">
+                🤝 Explain career options to my parents
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Messages Injected Here -->
+        <div id="dynamic-messages-container"></div>
+
+        <!-- Typing / Response Indicator (Hidden by default) -->
+        <div class="typing-indicator-row" id="typing-indicator" style="display: none;">
+          <div class="bubble-avatar" id="typing-avatar">🤖</div>
+          <div class="typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           BOTTOM COMPOSER
+      ───────────────────────────────────────────── -->
+      <div class="chat-composer-wrapper">
+        <form id="chat-composer-form" onsubmit="handleChatSubmit(event)" style="display: flex; flex-direction: column; gap: 0.5rem;">
+          
+          <div class="composer-input-row" style="display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box;">
+            <textarea id="chat-input"
+                      class="form-control composer-textarea"
+                      placeholder="Ask about careers, college pathways, skills, or interview prep... (Shift+Enter for newline)"
+                      rows="2"
+                      maxlength="2500"
+                      required
+                      style="flex: 1; min-width: 0; box-sizing: border-box;"
+                      oninput="handleComposerInput(this)"
+                      onkeydown="handleComposerKeydown(event)"></textarea>
+            
+            <button type="submit" id="btn-chat-send" class="btn btn-primary composer-send-btn ai-send-button" title="Send message (Enter)" style="flex-shrink: 0; white-space: nowrap;">
+              <span id="send-btn-text">Send</span>
+              <span id="send-btn-icon">➤</span>
+            </button>
+          </div>
+
+          <div class="composer-meta-row">
+            <span class="char-count" id="char-counter">0 / 2500 characters</span>
+            <span class="composer-disclaimer">
+              🔒 Educational guidance. Never guarantees jobs or admissions.
+            </span>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/ai_chat.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CareerCompass — Your future, your choice.{% endblock %}</title>
+  <meta name="description" content="Transparent, rule-based career guidance platform empowering students and parents with explainable recommendations and roadmaps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Lively Blue & White Atmospheric Animated Background -->
+  <div class="blue-ambient-bg" aria-hidden="true">
+    <div class="ambient-light-field field-1"></div>
+    <div class="ambient-light-field field-2"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="ambient-orb orb-4"></div>
+    <div class="ambient-orb orb-5"></div>
+    <div class="ambient-mesh"></div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="navbar-container navbar-inner">
+      <a href="{{ url_for('index') }}" class="brand" aria-label="CareerCompass Home">
+        <div class="brand-icon">🧭</div>
+        <div>
+          <span>CareerCompass</span>
+          <span class="brand-tagline">Your future, your choice.</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        ☰
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('quiz') }}" class="{% if request.endpoint in ['quiz', 'assessment'] %}active{% endif %}">Assessment</a></li>
+        <li><a href="{{ url_for('careers_catalog') }}" class="{% if request.endpoint == 'careers_catalog' %}active{% endif %}">Explore Careers</a></li>
+        <li><a href="{{ url_for('opportunities_view') }}" class="{% if request.endpoint == 'opportunities_view' %}active{% endif %}">Job Opportunities</a></li>
+        <li><a href="{{ url_for('appointments_view') }}" class="{% if request.endpoint == 'appointments_view' %}active{% endif %}">Appointments</a></li>
+        <li><a href="{{ url_for('ai_chat_view') }}" class="{% if request.endpoint == 'ai_chat_view' %}active{% endif %}">AI Chat</a></li>
+        <li><a href="{{ url_for('roadmap_view') }}" class="{% if request.endpoint == 'roadmap_view' %}active{% endif %}">Roadmap</a></li>
+        <li><a href="{{ url_for('simulator_view') }}" class="{% if request.endpoint == 'simulator_view' %}active{% endif %}">Reality Simulator</a></li>
+        <li><a href="{{ url_for('plans_view') }}" class="{% if request.endpoint == 'plans_view' %}active{% endif %}">Saved Plans</a></li>
+        <li><a href="{{ url_for('compare_view') }}" class="{% if request.endpoint == 'compare_view' %}active{% endif %}">Parent–Student Bridge</a></li>
+        <li><a href="{{ url_for('about_view') }}" class="{% if request.endpoint == 'about_view' %}active{% endif %}">How It Works</a></li>
+        <li><a href="{{ url_for('quiz') }}" class="btn btn-sm btn-primary nav-cta">Discover My Career</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content View -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer with Ethical Disclaimers -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <div class="brand-icon">🧭</div>
+            <div>
+              <span>CareerCompass</span>
+              <span class="brand-tagline">Your future, your choice.</span>
+            </div>
+          </div>
+          <p>
+            An open, transparent career guidance platform helping students navigate education and career decisions through self-discovery, factual insights, and constructive dialogue.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="{{ url_for('quiz') }}">Career Discovery Assessment</a></li>
+            <li><a href="{{ url_for('careers_catalog') }}">Career Exploration Catalog</a></li>
+            <li><a href="{{ url_for('opportunities_view') }}">Job & Internship Opportunities</a></li>
+            <li><a href="{{ url_for('appointments_view') }}">Book an Appointment</a></li>
+            <li><a href="{{ url_for('roadmap_view') }}">Interactive Snake Roadmap</a></li>
+            <li><a href="{{ url_for('simulator_view') }}">Career Reality Simulator</a></li>
+            <li><a href="{{ url_for('compare_view') }}">Student–Parent Bridge</a></li>
+            <li><a href="{{ url_for('plans_view') }}">Personalized Saved Plans</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Transparency & Ethics</h4>
+          <ul>
+            <li><a href="{{ url_for('about_view') }}">How the Algorithm Works</a></li>
+            <li><a href="{{ url_for('about_view') }}#disclaimers">Limitations & Disclaimers</a></li>
+            <li><a href="{{ url_for('about_view') }}#sources">Data Sources & Verification</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="disclaimer-banner">
+        <span class="icon">ℹ️</span>
+        <div>
+          <strong>Transparent Guidance Notice:</strong>
+          CareerCompass match scores are educational orientation indicators based on rule-based alignment with your submitted preferences. They are NOT scientific psychometric predictions, psychological diagnoses, or commercial employment/admission guarantees. Every student retains total agency over their future.
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 CareerCompass. Built with passion for the Tri-City Hackathon. Powered by Python, Flask & SQLite.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Saved Career Plans — CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+    <span class="badge badge-mint" style="margin-bottom: 0.5rem;">Persistent Progress</span>
+    <h2>My Saved Career Plans</h2>
+    <p>
+      Track your ongoing career roadmaps, check off practical milestones, and review completed actions.
+    </p>
+  </div>
+
+  {% if plans and plans|length > 0 %}
+  <div class="features-grid" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));">
+    {% for plan in plans %}
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+          <span class="badge badge-navy">{{ plan.category }}</span>
+          <span class="badge badge-mint">{{ plan.progress_percentage }}% Complete</span>
+        </div>
+
+        <h3 style="font-size: 1.4rem; margin-bottom: 0.25rem;">{{ plan.title }}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-subtle); margin-bottom: 1rem;">
+          Created for <strong>{{ plan.student_name }}</strong> &bull; Status: <span style="text-transform: capitalize;">{{ plan.status }}</span>
+        </p>
+
+        <!-- Progress bar -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+            <span>Milestones: {{ plan.completed_milestones }} / {{ plan.total_milestones }}</span>
+            <span>{{ plan.progress_percentage }}%</span>
+          </div>
+          <div class="progress-bar-bg" style="margin-top: 0;">
+            <div class="progress-bar-fill" style="width: {{ plan.progress_percentage }}%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+        <a href="{{ url_for('roadmap_view', plan_id=plan.id) }}" class="btn btn-primary btn-sm" style="flex: 1;">
+          Open Roadmap &rarr;
+        </a>
+        <a href="{{ url_for('career_detail', career_id=plan.career_id) }}" class="btn btn-secondary btn-sm">
+          Reality Check
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <!-- Empty State -->
+  <div class="card" style="text-align: center; padding: 4rem 2rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+    <h3>No Saved Career Plans Yet</h3>
+    <p style="max-width: 500px; margin: 0 auto 1.5rem; color: var(--text-muted);">
+      Take the Career Discovery Assessment to get tailored recommendations, or choose a pathway from the catalog to start tracking your personalized roadmap.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a href="{{ url_for('quiz') }}" class="btn btn-primary">Take Assessment</a>
+      <a href="{{ url_for('careers_catalog') }}" class="btn btn-secondary">Explore Careers</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

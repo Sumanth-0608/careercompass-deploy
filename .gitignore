@@ -1,0 +1,29 @@
+# Python virtual environment and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+
+# Environment files and API secrets
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+secrets*.json
+credentials*.json
+
+# SQLite local database
+instance/
+*.db
+*.sqlite3
+
+# Pytest and IDE
+.pytest_cache/
+.vscode/
+.idea/
+*.log
+
+.env.*

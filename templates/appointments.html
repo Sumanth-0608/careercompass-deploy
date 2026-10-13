@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+
+{% block title %}Book an Appointment — Career Guidance, Mock Interviews & Mentorship | CareerCompass{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: var(--container-max); width: var(--container-width); margin: 0 auto; padding-top: 1.5rem; padding-bottom: 4rem;">
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE HEADER & TRUST BANNER
+  ════════════════════════════════════════════════ -->
+  <div class="page-header" style="text-align: center; margin-bottom: 2.5rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.22); padding: 0.35rem 0.9rem; border-radius: 999px; margin-bottom: 0.75rem;">
+      <span style="font-size: 0.95rem;">📅</span>
+      <span style="font-size: 0.84rem; font-weight: 800; color: var(--primary-blue);">Real-Time Appointment Scheduling</span>
+    </div>
+    <h1 style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; color: var(--text-heading); margin-bottom: 0.5rem;">
+      Take Your Next Step — <span style="color: var(--primary-blue);">Book an Appointment</span>
+    </h1>
+    <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 720px; margin: 0 auto 1.5rem; line-height: 1.6;">
+      Connect directly with verified career counsellors, technical interview coaches, employment specialists, and family mediators. Guaranteed zero double-booking through live database reservation.
+    </p>
+
+    <!-- Ethical Verification Notice Banner -->
+    <div class="card glass-card" style="max-width: 860px; margin: 0 auto; padding: 0.9rem 1.4rem; border-left: 4px solid var(--primary-blue); text-align: left; background: rgba(255,255,255,0.7);">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 1.25rem;">🛡️</span>
+          <div>
+            <strong style="color: var(--text-heading); font-size: 0.92rem;">Verified Guidance Network &amp; Transparent Practice</strong>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">
+              All sessions are subsidized for students. Verified practitioners hold verified credentials. Demonstration sessions are clearly marked.
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <span class="badge badge-verified" style="font-size: 0.75rem;">🛡️ Verified Practicum</span>
+          <span class="badge badge-demo" style="font-size: 0.75rem;">🧪 Demonstration Practice</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TABS: Book a Session VS Manage My Booking
+  ════════════════════════════════════════════════ -->
+  <div style="display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 2rem;">
+    <button type="button" class="btn btn-md btn-primary tab-toggle-btn active" id="tab-btn-schedule" onclick="switchAppointmentTab('schedule')">
+      📅 Book a Session
+    </button>
+    <button type="button" class="btn btn-md btn-outline tab-toggle-btn" id="tab-btn-manage" onclick="switchAppointmentTab('manage')">
+      🔍 Manage / Look Up Booking
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TAB 1: SCHEDULE / BROWSE SLOTS
+  ════════════════════════════════════════════════ -->
+  <div id="tab-schedule-content">
+
+    <!-- Filters Bar with Glassmorphic Dropdowns -->
+    <div class="card glass-card filter-card-container" style="padding: 1.25rem 1.5rem; margin-bottom: 2rem; border: 1px solid rgba(37,99,235,0.18); overflow: visible !important;">
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        
+        <!-- Category Selection Header & Controls -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <label id="lbl-filter-category" class="glass-dropdown-label" style="margin-bottom: 0;">
+              Session Category:
+            </label>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Choose a guidance category via animated glass dropdown or quick pills</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(250px, 340px) 1fr; gap: 1rem; align-items: center;">
+            <!-- Custom Glassmorphic Category Dropdown -->
+            <div class="glass-dropdown-wrapper" id="category-dropdown-wrapper">
+              <div class="glass-dropdown" id="dropdown-category" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="lbl-filter-category" tabindex="0">
+                <button type="button" class="glass-dropdown-trigger" id="dropdown-category-btn" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="glass-dropdown-value" id="dropdown-category-label">{{ selected_category if selected_category and selected_category != 'All' else 'All Categories' }}</span>
+                  <span class="glass-dropdown-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="glass-dropdown-menu" id="dropdown-category-menu" role="listbox" aria-label="Session Category Options">
+                  <div class="glass-dropdown-option {% if not selected_category or selected_category == 'All' %}selected{% endif %}" role="option" aria-selected="{% if not selected_category or selected_category == 'All' %}true{% else %}false{% endif %}" data-value="All" tabindex="0">
+                    <span class="opt-text">🌟 All Categories</span>
+                    <span class="opt-check">✓</span>
+                  </div>
+                  {% for cat in categories %}
+                  <div class="glass-dropdown-option {% if cat == selected_category %}selected{% endif %}" role="option" aria-selected="{% if cat == selected_category %}true{% else %}false{% endif %}" data-value="{{ cat }}" tabindex="0">
+                    <span class="opt-text">{{ cat }}</span>
+                    <span class="opt-check">✓</span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Category Filter Pills -->
+            <div class="filter-pills" id="category-filter-pills" style="margin: 0;">
+              {% for cat in categories %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Date, Format & Specialization Row -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(37,99,235,0.12); overflow: visible;">
+          <div>
+            <label for="filter-date-input" class="glass-dropdown-label">
+              Filter by Date:
+            </label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="date" id="filter-date-input" class="form-control" style="padding: 0.52rem 0.75rem; font-size: 0.9rem;" value="{{ selected_date or '' }}" onchange="handleDateChange(this.value)">
+              <button type="button" class="btn btn-sm btn-outline" onclick="clearDateFilter()" title="Show all dates" style="white-space: nowrap; padding: 0.52rem 0.75rem;">
+                All Dates
+              </button>
+            </div>
+          </div>
+
+          <!-- Glass Delivery Format Dropdown -->
+          <div>
+            <div class="glass-dropdown-wrapper" id="format-dropdown-wrapper">
+              <label id="lbl-filter-format" class="glass-dropdown-label">
+                Delivery Format:
+              </label>
+              <div class="glass-dropdown" id="dropdown-format" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="lbl-filter-format" tabindex="0">
+                <button type="button" class="glass-dropdown-trigger" id="dropdown-format-btn" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="glass-dropdown-value" id="dropdown-format-label">{{ selected_format or 'All Formats' }}</span>
+                  <span class="glass-dropdown-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="glass-dropdown-menu" id="dropdown-format-menu" role="listbox" aria-label="Delivery Format Options">
+                  {% for fmt in formats %}
+                  <div class="glass-dropdown-option {% if fmt == selected_format %}selected{% endif %}" role="option" aria-selected="{% if fmt == selected_format %}true{% else %}false{% endif %}" data-value="{{ fmt }}" tabindex="0">
+                    <span class="opt-text">{{ fmt }}</span>
+                    <span class="opt-check">✓</span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!-- Hidden backing select for form/DOM interoperability -->
+              <select id="filter-format-select" class="visually-hidden-backing" aria-hidden="true" tabindex="-1" onchange="handleFormatChange(this.value)">
+                {% for fmt in formats %}
+                <option value="{{ fmt }}" {% if fmt == selected_format %}selected{% endif %}>{{ fmt }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Glass Session Specialization Dropdown -->
+          <div>
+            <div class="glass-dropdown-wrapper" id="type-dropdown-wrapper">
+              <label id="lbl-filter-type" class="glass-dropdown-label">
+                Session Specialization:
+              </label>
+              <div class="glass-dropdown" id="dropdown-type" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="lbl-filter-type" tabindex="0">
+                <button type="button" class="glass-dropdown-trigger" id="dropdown-type-btn" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="glass-dropdown-value" id="dropdown-type-label">All Specializations</span>
+                  <span class="glass-dropdown-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="glass-dropdown-menu" id="dropdown-type-menu" role="listbox" aria-label="Session Specialization Options">
+                  <div class="glass-dropdown-option selected" role="option" aria-selected="true" data-value="All" tabindex="0">
+                    <span class="opt-text">All Specializations</span>
+                    <span class="opt-check">✓</span>
+                  </div>
+                  {% for t in appointment_types %}
+                  <div class="glass-dropdown-option" role="option" aria-selected="false" data-value="{{ t.id }}" tabindex="0">
+                    <span class="opt-text">{{ t.title }} ({{ t.duration_minutes }}m)</span>
+                    <span class="opt-check">✓</span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!-- Hidden backing select for form/DOM interoperability -->
+              <select id="filter-type-select" class="visually-hidden-backing" aria-hidden="true" tabindex="-1" onchange="handleTypeChange(this.value)">
+                <option value="All">All Specializations</option>
+                {% for t in appointment_types %}
+                <option value="{{ t.id }}">{{ t.title }} ({{ t.duration_minutes }}m)</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Active Slots Count & Live Availability Status -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.5);"></span>
+        <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-heading);" id="slots-count-display">
+          Loading live available slots...
+        </span>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <label style="font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+          <input type="checkbox" id="show-booked-checkbox" onchange="toggleIncludeBooked(this.checked)">
+          Show booked slots
+        </label>
+        <button type="button" class="btn btn-sm btn-outline" onclick="loadSlots()" title="Refresh live availability">
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Slots Grid Container -->
+    <div id="slots-grid-container" class="slots-grid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Empty State Container -->
+    <div id="slots-empty-state" class="card glass-card" style="display: none; text-align: center; padding: 3.5rem 1.5rem; margin-top: 1rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🗓️</div>
+      <h3 style="color: var(--text-heading); margin-bottom: 0.5rem;">No Slots Match Your Current Selection</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6;">
+        All slots on this specific date or category may be booked or none were scheduled. You can view all upcoming dates or reset your filters.
+      </p>
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <button type="button" class="btn btn-sm btn-primary" onclick="resetAllFilters()">View All Upcoming Dates</button>
+        <a href="{{ url_for('roadmap_view') }}" class="btn btn-sm btn-outline">Explore Snake Roadmap &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TAB 2: MANAGE MY BOOKING
+  ════════════════════════════════════════════════ -->
+  <div id="tab-manage-content" style="display: none;">
+    <div class="card glass-card" style="max-width: 680px; margin: 0 auto 2.5rem; padding: 2rem;">
+      <h3 style="color: var(--text-heading); margin-bottom: 0.5rem;">Manage Your Booking</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem; line-height: 1.5;">
+        Enter your unique booking reference (e.g. <code>CC-APT-9102</code>) or the email address used during booking to review details, cancel, or reschedule.
+      </p>
+
+      <form id="manage-lookup-form" onsubmit="handleManageLookup(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="manage-lookup-input" class="form-control" placeholder="Booking Ref (CC-APT-XXXX) or student@email.com" required style="font-size: 0.95rem;">
+          <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Look Up</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="manage-results-container" style="max-width: 860px; margin: 0 auto;">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     BOOKING MODAL (Direct Slot Reservation)
+════════════════════════════════════════════════ -->
+<div id="booking-modal" class="modal-backdrop" style="display: none;" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-dialog card glass-card" style="max-width: 580px; width: 92%; margin: 3rem auto; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto;">
+    <button type="button" class="modal-close-btn" onclick="closeBookingModal()" aria-label="Close modal">&times;</button>
+    
+    <div id="booking-modal-form-view">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <div id="modal-type-icon" style="font-size: 1.8rem;">📅</div>
+        <div>
+          <h3 id="modal-type-title" style="margin: 0; color: var(--text-heading); font-size: 1.25rem;">Session Title</h3>
+          <span id="modal-type-meta" style="font-size: 0.82rem; color: var(--text-muted);">Category · Duration</span>
+        </div>
+      </div>
+
+      <!-- Selected Slot Summary Box -->
+      <div class="card" style="background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.2); padding: 0.85rem 1.15rem; margin-bottom: 1.5rem; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <div style="font-size: 0.82rem; color: var(--text-subtle); text-transform: uppercase; font-weight: 800;">Date &amp; Time</div>
+            <div id="modal-slot-datetime" style="font-size: 1.05rem; font-weight: 800; color: var(--primary-blue-hover);">
+              YYYY-MM-DD · 00:00
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.82rem; color: var(--text-subtle); text-transform: uppercase; font-weight: 800;">Practitioner</div>
+            <div id="modal-provider-name" style="font-weight: 700; color: var(--text-heading);">Provider Name</div>
+            <span id="modal-provider-badge" class="badge badge-verified" style="font-size: 0.72rem;">Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="booking-submission-form" onsubmit="handleBookingSubmit(event)">
+        <input type="hidden" id="form-slot-id" value="">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem;">
+          <div>
+            <label for="form-student-name" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+              Full Name *
+            </label>
+            <input type="text" id="form-student-name" class="form-control" required placeholder="e.g. Rahul Sharma">
+          </div>
+          <div>
+            <label for="form-student-email" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+              Email Address *
+            </label>
+            <input type="email" id="form-student-email" class="form-control" required placeholder="name@example.com">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem;">
+          <div>
+            <label for="form-student-phone" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+              Phone / WhatsApp <span style="font-weight: 400; color: var(--text-subtle);">(Optional)</span>
+            </label>
+            <input type="tel" id="form-student-phone" class="form-control" placeholder="+91 98765 43210">
+          </div>
+          <div>
+            <label for="form-education-level" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+              Current Education Level *
+            </label>
+            <select id="form-education-level" class="form-control" required>
+              <option value="Class 10">Class 10</option>
+              <option value="Class 11-12">Class 11–12 (Science / Comm / Arts)</option>
+              <option value="Polytechnic / Diploma">Polytechnic / Diploma</option>
+              <option value="Undergraduate" selected>Undergraduate Degree (B.Tech / B.Sc / B.Com)</option>
+              <option value="Graduate / Working">Graduate / Early Working Professional</option>
+              <option value="Parent / Guardian">Parent / Guardian</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 0.85rem;">
+          <label for="form-career-interest" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+            Target Career or Academic Stream
+          </label>
+          <input type="text" id="form-career-interest" class="form-control" placeholder="e.g. Civil Engineering, Pharmacy, Robotics, Software, Dance Choreography">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label for="form-notes" style="font-size: 0.84rem; font-weight: 700; color: var(--text-heading); display: block; margin-bottom: 0.25rem;">
+            Questions or Specific Topics to Discuss <span style="font-weight: 400; color: var(--text-subtle);">(Optional)</span>
+          </label>
+          <textarea id="form-notes" class="form-control" rows="2" placeholder="e.g. I need feedback on my technical resume, or advice on lateral entry B.Tech..."></textarea>
+        </div>
+
+        <!-- Ethical Lock Disclaimer -->
+        <div style="font-size: 0.78rem; color: var(--text-subtle); margin-bottom: 1.25rem; line-height: 1.4;">
+          🔒 <strong>Atomic Slot Lock:</strong> This slot is atomically reserved in SQLite to prevent double-booking. A confirmation code will be issued immediately upon confirmation.
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeBookingModal()">Cancel</button>
+          <button type="submit" id="submit-booking-btn" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+            <span>Lock &amp; Confirm Booking</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Booking Confirmation Success View -->
+    <div id="booking-modal-success-view" style="display: none; text-align: center; padding: 1rem 0;">
+      <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+      <h3 style="color: #059669; margin-bottom: 0.25rem;">Appointment Confirmed!</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+        Your session has been securely booked and reserved in the database.
+      </p>
+
+      <div class="card" style="background: rgba(37,99,235,0.06); border: 2px dashed rgba(37,99,235,0.3); padding: 1.25rem; margin-bottom: 1.5rem; text-align: left; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(37,99,235,0.15); padding-bottom: 0.5rem;">
+          <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-subtle);">BOOKING REFERENCE</span>
+          <span id="success-booking-ref" style="font-size: 1.2rem; font-weight: 900; color: var(--primary-blue); font-family: monospace;">CC-APT-XXXX</span>
+        </div>
+        <div style="font-size: 0.9rem; margin-bottom: 0.35rem;">
+          <strong style="color: var(--text-heading);">Session:</strong> <span id="success-type-title">Title</span>
+        </div>
+        <div style="font-size: 0.9rem; margin-bottom: 0.35rem;">
+          <strong style="color: var(--text-heading);">When:</strong> <span id="success-datetime">Date &amp; Time</span>
+        </div>
+        <div style="font-size: 0.9rem; margin-bottom: 0.35rem;">
+          <strong style="color: var(--text-heading);">Practitioner:</strong> <span id="success-provider">Name</span>
+        </div>
+        <div style="font-size: 0.9rem; margin-bottom: 0.35rem;">
+          <strong style="color: var(--text-heading);">Connection Mode:</strong> <span id="success-meeting-mode">Google Meet (Encrypted Video Link)</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <button type="button" class="btn btn-primary" onclick="closeBookingModal(); loadSlots();">Done</button>
+        <button type="button" class="btn btn-outline" onclick="copyBookingRef()">📋 Copy Reference</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script src="{{ url_for('static', filename='js/appointments.js') }}" defer></script>
+{% endblock %}
